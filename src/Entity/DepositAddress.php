@@ -22,15 +22,15 @@ class DepositAddress
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Adress::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $address;
-
-    /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="depositAddress")
      */
     private $game;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $address;
 
     public function __construct()
     {
@@ -40,18 +40,6 @@ class DepositAddress
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAddress(): ?Adress
-    {
-        return $this->address;
-    }
-
-    public function setAddress(Adress $address): self
-    {
-        $this->address = $address;
-
-        return $this;
     }
 
     /**
@@ -80,6 +68,18 @@ class DepositAddress
                 $game->setDepositAddress(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
