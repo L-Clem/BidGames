@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AdressRepository;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=AdressRepository::class)
+ * @ORM\Entity(repositoryClass=AddressRepository::class)
  */
 #[ApiResource]
-class Adress
+class Address
 {
     /**
      * @ORM\Id
@@ -20,7 +20,7 @@ class Adress
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="smallint")
      */
     private $streetNumber;
 
@@ -32,10 +32,10 @@ class Adress
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $adressComplement;
+    private $addressComplement;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=5)
      */
     private $postalCode;
 
@@ -84,14 +84,14 @@ class Adress
         return $this;
     }
 
-    public function getAdressComplement(): ?string
+    public function getAddressComplement(): ?string
     {
-        return $this->adressComplement;
+        return $this->addressComplement;
     }
 
-    public function setAdressComplement(?string $adressComplement): self
+    public function setAddressComplement(?string $addressComplement): self
     {
-        $this->adressComplement = $adressComplement;
+        $this->addressComplement = $addressComplement;
 
         return $this;
     }

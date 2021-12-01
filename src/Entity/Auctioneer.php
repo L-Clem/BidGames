@@ -32,12 +32,6 @@ class Auctioneer extends Person
     private $auctionHouse;
 
     /**
-     * @ORM\OneToOne(targetEntity=Adress::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $adress;
-
-    /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="auctioneer")
      */
     private $games;
@@ -101,18 +95,6 @@ class Auctioneer extends Person
     public function setAuctionHouse(?AuctionHouse $auctionHouse): self
     {
         $this->auctionHouse = $auctionHouse;
-
-        return $this;
-    }
-
-    public function getAdress(): ?Adress
-    {
-        return $this->adress;
-    }
-
-    public function setAdress(Adress $adress): self
-    {
-        $this->adress = $adress;
 
         return $this;
     }

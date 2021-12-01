@@ -27,15 +27,15 @@ class AuctionHouse
     private $name;
 
     /**
-     * @ORM\OneToOne(targetEntity=Adress::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $adress;
-
-    /**
      * @ORM\OneToMany(targetEntity=Auctioneer::class, mappedBy="auctionHouse")
      */
     private $auctioneers;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $address;
 
     public function __construct()
     {
@@ -55,18 +55,6 @@ class AuctionHouse
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAdress(): ?Adress
-    {
-        return $this->adress;
-    }
-
-    public function setAdress(Adress $adress): self
-    {
-        $this->adress = $adress;
 
         return $this;
     }
@@ -97,6 +85,18 @@ class AuctionHouse
                 $auctioneer->setAuctionHouse(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

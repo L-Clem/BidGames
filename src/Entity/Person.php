@@ -48,6 +48,12 @@ abstract class Person
      */
     private $desactivated;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $address;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,6 +115,18 @@ abstract class Person
     public function setDesactivated(bool $desactivated): self
     {
         $this->desactivated = $desactivated;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

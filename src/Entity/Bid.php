@@ -38,9 +38,9 @@ class Bid
     private $auctioneer;
 
     /**
-     * @ORM\OneToOne(targetEntity=Adress::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      */
-    private $adress;
+    private $address;
 
     /**
      * @ORM\OneToMany(targetEntity=AnnounceBid::class, mappedBy="bid")
@@ -93,14 +93,14 @@ class Bid
         return $this;
     }
 
-    public function getAdress(): ?Adress
+    public function getAddress(): ?Address
     {
-        return $this->adress;
+        return $this->address;
     }
 
-    public function setAdress(?Adress $adress): self
+    public function setAddress(?Address $address): self
     {
-        $this->adress = $adress;
+        $this->address = $address;
 
         return $this;
     }
