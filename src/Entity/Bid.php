@@ -37,20 +37,19 @@ class Bid
      */
     private $auctioneer;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity=AnnounceBid::class, mappedBy="bid")
-     */
-    private $announceBids;
-
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      */
     private $address;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SaleBid::class, mappedBy="bid")
+     */
+    private $saleBids;
+
     public function __construct()
     {
-        $this->announceBids = new ArrayCollection();
+        $this->saleBids = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,38 +93,6 @@ class Bid
         return $this;
     }
 
-
-
-    /**
-     * @return Collection|AnnounceBid[]
-     */
-    public function getAnnounceBids(): Collection
-    {
-        return $this->announceBids;
-    }
-
-    public function addAnnounceBid(AnnounceBid $announceBid): self
-    {
-        if (!$this->announceBids->contains($announceBid)) {
-            $this->announceBids[] = $announceBid;
-            $announceBid->setBid($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnounceBid(AnnounceBid $announceBid): self
-    {
-        if ($this->announceBids->removeElement($announceBid)) {
-            // set the owning side to null (unless already changed)
-            if ($announceBid->getBid() === $this) {
-                $announceBid->setBid(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAddress(): ?Address
     {
         return $this->address;
@@ -134,6 +101,36 @@ class Bid
     public function setAddress(?Address $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SaleBid[]
+     */
+    public function getSaleBids(): Collection
+    {
+        return $this->saleBids;
+    }
+
+    public function addSaleBid(SaleBid $saleBid): self
+    {
+        if (!$this->saleBids->contains($saleBid)) {
+            $this->saleBids[] = $saleBid;
+            $saleBid->setBid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSaleBid(SaleBid $saleBid): self
+    {
+        if ($this->saleBids->removeElement($saleBid)) {
+            // set the owning side to null (unless already changed)
+            if ($saleBid->getBid() === $this) {
+                $saleBid->setBid(null);
+            }
+        }
 
         return $this;
     }
