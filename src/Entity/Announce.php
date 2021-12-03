@@ -61,12 +61,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'denormalization_context' => ['groups' => ['create:Announce']]
         ],
     ],
-
 )]
 #[ApiFilter(
     SearchFilter::class,
     properties: ['title' => 'partial', 'game.title' => 'partial', 'tag.name' => 'partial'],
 )]
+
 #[ApiFilter(
     DateFilter::class,
     properties: ['publishedAt']
