@@ -11,6 +11,6 @@ class AnnounceCountFavorites
 
     public function __invoke(Announce $data): int
     {
-        return $data->getFavorites()->count();
+        return  $data->getFavorites()->count();
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * 
  */
 #[ApiResource]
-class User extends Person
+class User extends Individual
 {
 
 
