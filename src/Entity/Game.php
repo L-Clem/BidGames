@@ -78,6 +78,11 @@ class Game
      */
     private $sales;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $invisbleFor;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -254,6 +259,18 @@ class Game
         if ($this->sales->removeElement($sale)) {
             $sale->removeGame($this);
         }
+
+        return $this;
+    }
+
+    public function getInvisbleFor(): ?string
+    {
+        return $this->invisbleFor;
+    }
+
+    public function setInvisbleFor(string $invisbleFor): self
+    {
+        $this->invisbleFor = $invisbleFor;
 
         return $this;
     }
