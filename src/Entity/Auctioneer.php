@@ -56,7 +56,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 )]
 #[ApiFilter(OrderFilter::class, properties: ['firstname' => 'ASC', 'lastname' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
-class Auctioneer extends Person
+class Auctioneer extends Individual
 {
 
     /**
