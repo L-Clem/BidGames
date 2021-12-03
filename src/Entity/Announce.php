@@ -2,16 +2,76 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\AnnounceCountFavorites;
 use App\Repository\AnnounceRepository;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * 
  * @ORM\Entity(repositoryClass=AnnounceRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Announce', 'read:Announces']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:Announce', 'create:Announce']]
+        ],
+        'delete',
+        'countFavorites' => [
+            'method' => 'GET',
+            'path' => '/announces/{id}/favorites/count',
+            'controller' => AnnounceCountFavorites::class,
+            'openapi_context' => [
+                'summary' => 'Give you the favorites users number who favorite your announce ',
+                'responses' => [
+                    '200' => [
+                        'description' => 'OK',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'integer',
+                                    'example' => 5
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Announces']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:Announce']]
+        ],
+    ],
+
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: ['title' => 'partial', 'game.title' => 'partial', 'tag.name' => 'partial'],
+)]
+#[ApiFilter(
+    DateFilter::class,
+    properties: ['publishedAt']
+)]
+
 class Announce
 {
     /**
@@ -24,52 +84,68 @@ class Announce
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Announces', 'create:Announce'])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Announces', 'create:Announce'])]
     private $description;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Announce', 'create:Announce'])]
     private $lotNumber;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['read:Announces'])]
     private $publishedAt;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Announce', 'create:Announce'])]
     private $tax;
 
     /**
      * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="announces")
+     * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Announce', 'create:Announce'])]
+    #[ApiSubresource()]
     private $game;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="favorites")
+     * @ORM\JoinColumn(nullable=true)
      */
+    #[Groups(['read:Announce', 'create:Announce'])]
     private $favorites;
 
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Announces', 'create:Announce'])]
     private $Picture;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="announce")
      */
+    #[Groups(['read:Announce', 'create:Announce'])]
+    #[ApiSubresource()]
     private $tags;
 
     /**
      * @ORM\OneToMany(targetEntity=AnnounceBid::class, mappedBy="announce")
+     * @ORM\JoinColumn(nullable=true)
      */
+    #[Groups(['read:Announce', 'create:Announce'])]
+    #[ApiSubresource()]
     private $announceBids;
 
     public function __construct()

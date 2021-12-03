@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -19,21 +20,25 @@ class User extends Person
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"person:read", "person:write"})
      */
     private $age;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"person:read", "person:write"})
      */
     private $verified;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="owner", orphanRemoval=true)
+     * @Groups({"person:read", "person:write"})
      */
     private $games;
 
     /**
      * @ORM\ManyToMany(targetEntity=Announce::class, mappedBy="favorites")
+     * @Groups({"person:read", "person:write"})
      */
     private $favorites;
 

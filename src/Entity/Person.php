@@ -2,8 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @ORM\Entity(repositoryClass=PersonRepository::class)
@@ -21,37 +26,53 @@ abstract class Person
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Auctionners'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[
+        Groups(['read:Auctionners', 'create:Auctionner']),
+        Length(min: 2)
+    ]
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[
+        Groups(['read:Auctionners', 'create:Auctionner']),
+        Length(min: 2)
+    ]
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[
+        Groups(['read:Auctionners', 'create:Auctionner']),
+        Email()
+    ]
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Auctionner', 'create:Auctionner'])]
     private $password;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean",options={"default": "0"})
      */
-    private $desactivated;
+    #[Groups(['read:Auctionner'])]
+    private $desactivated = false;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Auctionner', 'create:Auctionner'])]
     private $address;
 
     public function getId(): ?int
