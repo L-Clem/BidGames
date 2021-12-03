@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AddressRepository::class)
@@ -22,16 +23,19 @@ class Address
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(['read:Auctionner'])]
     private $streetNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Auctionner'])]
     private $streetName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(['read:Auctionner'])]
     private $addressComplement;
 
     /**
@@ -54,6 +58,12 @@ class Address
      * @ORM\JoinColumn(nullable=false)
      */
     private $department;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Bid::class)
+     * * @ORM\JoinColumn(nullable=true)
+     */
+    private $bid;
 
     public function getId(): ?int
     {
