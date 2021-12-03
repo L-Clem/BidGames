@@ -37,12 +37,6 @@ class User extends Individual
     private $games;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Announce::class, mappedBy="favorites")
-     * @Groups({"person:read", "person:write"})
-     */
-    private $favorites;
-
-    /**
      * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="user", orphanRemoval=true)
      */
     private $purchaseOrders;
@@ -50,7 +44,6 @@ class User extends Individual
     public function __construct()
     {
         $this->games = new ArrayCollection();
-        $this->favorites = new ArrayCollection();
         $this->purchaseOrders = new ArrayCollection();
     }
 
@@ -105,33 +98,6 @@ class User extends Individual
             if ($game->getOwner() === $this) {
                 $game->setOwner(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Announce[]
-     */
-    public function getFavorites(): Collection
-    {
-        return $this->favorites;
-    }
-
-    public function addFavorite(Announce $favorite): self
-    {
-        if (!$this->favorites->contains($favorite)) {
-            $this->favorites[] = $favorite;
-            $favorite->addFavorite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFavorite(Announce $favorite): self
-    {
-        if ($this->favorites->removeElement($favorite)) {
-            $favorite->removeFavorite($this);
         }
 
         return $this;

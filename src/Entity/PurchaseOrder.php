@@ -36,10 +36,9 @@ class PurchaseOrder
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=AnnounceBid::class, inversedBy="purchaseOrders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=SaleBid::class, inversedBy="purchaseOrders")
      */
-    private $announceBid;
+    private $saleBid;
 
     public function getId(): ?int
     {
@@ -82,14 +81,14 @@ class PurchaseOrder
         return $this;
     }
 
-    public function getAnnounceBid(): ?AnnounceBid
+    public function getSaleBid(): ?SaleBid
     {
-        return $this->announceBid;
+        return $this->saleBid;
     }
 
-    public function setAnnounceBid(?AnnounceBid $announceBid): self
+    public function setSaleBid(?SaleBid $saleBid): self
     {
-        $this->announceBid = $announceBid;
+        $this->saleBid = $saleBid;
 
         return $this;
     }
