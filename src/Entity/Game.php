@@ -51,11 +51,6 @@ class Game
     private $categories;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Announce::class, mappedBy="game")
-     */
-    private $announces;
-
-    /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="game")
      */
     #[Groups(['read:Announce'])]
@@ -78,11 +73,16 @@ class Game
     #[Groups(['read:Announce'])]
     private $description;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Sale::class, mappedBy="game")
+     */
+    private $sales;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->announces = new ArrayCollection();
         $this->picture = new ArrayCollection();
+        $this->sales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,33 +166,6 @@ class Game
     }
 
     /**
-     * @return Collection|Announce[]
-     */
-    public function getAnnounces(): Collection
-    {
-        return $this->announces;
-    }
-
-    public function addAnnounce(Announce $announce): self
-    {
-        if (!$this->announces->contains($announce)) {
-            $this->announces[] = $announce;
-            $announce->addGame($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnounce(Announce $announce): self
-    {
-        if ($this->announces->removeElement($announce)) {
-            $announce->removeGame($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|File[]
      */
     public function getPicture(): Collection
@@ -254,6 +227,33 @@ class Game
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sale[]
+     */
+    public function getSales(): Collection
+    {
+        return $this->sales;
+    }
+
+    public function addSale(Sale $sale): self
+    {
+        if (!$this->sales->contains($sale)) {
+            $this->sales[] = $sale;
+            $sale->addGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSale(Sale $sale): self
+    {
+        if ($this->sales->removeElement($sale)) {
+            $sale->removeGame($this);
+        }
 
         return $this;
     }

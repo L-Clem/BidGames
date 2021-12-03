@@ -29,13 +29,13 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Announce::class, inversedBy="tags")
+     * @ORM\ManyToMany(targetEntity=Sale::class, mappedBy="tags")
      */
-    private $announce;
+    private $sales;
 
     public function __construct()
     {
-        $this->announce = new ArrayCollection();
+        $this->sales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,25 +56,28 @@ class Tag
     }
 
     /**
-     * @return Collection|Announce[]
+     * @return Collection|Sale[]
      */
-    public function getAnnounce(): Collection
+    public function getSales(): Collection
     {
-        return $this->announce;
+        return $this->sales;
     }
 
-    public function addAnnounce(Announce $announce): self
+    public function addSale(Sale $sale): self
     {
-        if (!$this->announce->contains($announce)) {
-            $this->announce[] = $announce;
+        if (!$this->sales->contains($sale)) {
+            $this->sales[] = $sale;
+            $sale->addTag($this);
         }
 
         return $this;
     }
 
-    public function removeAnnounce(Announce $announce): self
+    public function removeSale(Sale $sale): self
     {
-        $this->announce->removeElement($announce);
+        if ($this->sales->removeElement($sale)) {
+            $sale->removeTag($this);
+        }
 
         return $this;
     }
