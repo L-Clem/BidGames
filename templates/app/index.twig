@@ -6,6 +6,11 @@
     
  {% block body %}
     
-     <div id="root"></div>
+     <div id="testid"></div>
     
  {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/test.js') }}"></script>
+{% endblock %}
