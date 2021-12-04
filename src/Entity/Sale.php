@@ -2,28 +2,87 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AnnounceRepository;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\SaleCountFavorites;
+use App\Repository\SaleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=AnnounceRepository::class)
+ * @ORM\Entity(repositoryClass=SaleRepository::class)
  */
-#[ApiResource]
-class Announce
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Sale', 'read:Sales']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:Sale', 'create:Sale']]
+        ],
+        'delete',
+        'countFavorites' => [
+            'method' => 'GET',
+            'path' => '/sales/{id}/favorites/count',
+            'controller' => SaleCountFavorites::class,
+            'openapi_context' => [
+                'summary' => 'Give you the favorites users number who favorite your sale ',
+                'responses' => [
+                    '200' => [
+                        'description' => 'OK',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'integer',
+                                    'example' => 5
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Sales']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:Sale']]
+        ],
+    ],
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: ['title' => 'partial', 'game.title' => 'partial', 'tag.name' => 'partial'],
+)]
+
+#[ApiFilter(
+    DateFilter::class,
+    properties: ['publishedAt']
+)]
+
+class Sale
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Sales'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Sales', 'create:Sale'])]
     private $title;
 
     /**
@@ -47,12 +106,12 @@ class Announce
     private $tax;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="announces")
+     * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="sales")
      */
     private $game;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="favorites")
+     * @ORM\ManyToMany(targetEntity=User::class)
      */
     private $favorites;
 
@@ -60,24 +119,24 @@ class Announce
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Picture;
+    private $picture;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="announce")
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="sales")
      */
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity=AnnounceBid::class, mappedBy="announce")
+     * @ORM\OneToMany(targetEntity=SaleBid::class, mappedBy="sale", orphanRemoval=true)
      */
-    private $announceBids;
+    private $saleBids;
 
     public function __construct()
     {
         $this->game = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->announceBids = new ArrayCollection();
+        $this->saleBids = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,12 +254,12 @@ class Announce
 
     public function getPicture(): ?File
     {
-        return $this->Picture;
+        return $this->picture;
     }
 
-    public function setPicture(File $Picture): self
+    public function setPicture(File $picture): self
     {
-        $this->Picture = $Picture;
+        $this->picture = $picture;
 
         return $this;
     }
@@ -217,7 +276,6 @@ class Announce
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-            $tag->addAnnounce($this);
         }
 
         return $this;
@@ -225,37 +283,35 @@ class Announce
 
     public function removeTag(Tag $tag): self
     {
-        if ($this->tags->removeElement($tag)) {
-            $tag->removeAnnounce($this);
-        }
+        $this->tags->removeElement($tag);
 
         return $this;
     }
 
     /**
-     * @return Collection|AnnounceBid[]
+     * @return Collection|SaleBid[]
      */
-    public function getAnnounceBids(): Collection
+    public function getSaleBids(): Collection
     {
-        return $this->announceBids;
+        return $this->saleBids;
     }
 
-    public function addAnnounceBid(AnnounceBid $announceBid): self
+    public function addSaleBid(SaleBid $saleBid): self
     {
-        if (!$this->announceBids->contains($announceBid)) {
-            $this->announceBids[] = $announceBid;
-            $announceBid->setAnnounce($this);
+        if (!$this->saleBids->contains($saleBid)) {
+            $this->saleBids[] = $saleBid;
+            $saleBid->setSale($this);
         }
 
         return $this;
     }
 
-    public function removeAnnounceBid(AnnounceBid $announceBid): self
+    public function removeSaleBid(SaleBid $saleBid): self
     {
-        if ($this->announceBids->removeElement($announceBid)) {
+        if ($this->saleBids->removeElement($saleBid)) {
             // set the owning side to null (unless already changed)
-            if ($announceBid->getAnnounce() === $this) {
-                $announceBid->setAnnounce(null);
+            if ($saleBid->getSale() === $this) {
+                $saleBid->setSale(null);
             }
         }
 

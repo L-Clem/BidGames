@@ -43,13 +43,13 @@ class Bid
     private $address;
 
     /**
-     * @ORM\OneToMany(targetEntity=AnnounceBid::class, mappedBy="bid")
+     * @ORM\OneToMany(targetEntity=SaleBid::class, mappedBy="bid")
      */
-    private $announceBids;
+    private $saleBids;
 
     public function __construct()
     {
-        $this->announceBids = new ArrayCollection();
+        $this->saleBids = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,32 +106,31 @@ class Bid
     }
 
     /**
-     * @return Collection|AnnounceBid[]
+     * @return Collection|SaleBid[]
      */
-    public function getAnnounceBids(): Collection
+    public function getSaleBids(): Collection
     {
-        return $this->announceBids;
+        return $this->saleBids;
     }
 
-    public function addAnnounceBid(AnnounceBid $announceBid): self
+    public function addSaleBid(SaleBid $saleBid): self
     {
-        if (!$this->announceBids->contains($announceBid)) {
-            $this->announceBids[] = $announceBid;
-            $announceBid->setBid($this);
+        if (!$this->saleBids->contains($saleBid)) {
+            $this->saleBids[] = $saleBid;
+            $saleBid->setBid($this);
         }
 
         return $this;
     }
 
-    public function removeAnnounceBid(AnnounceBid $announceBid): self
+    public function removeSaleBid(SaleBid $saleBid): self
     {
-        if ($this->announceBids->removeElement($announceBid)) {
+        if ($this->saleBids->removeElement($saleBid)) {
             // set the owning side to null (unless already changed)
-            if ($announceBid->getBid() === $this) {
-                $announceBid->setBid(null);
+            if ($saleBid->getBid() === $this) {
+                $saleBid->setBid(null);
             }
         }
-
         return $this;
     }
 }

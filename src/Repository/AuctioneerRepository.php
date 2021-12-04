@@ -35,6 +35,14 @@ class AuctioneerRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findAllActivated()
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.desactivated = :val')
+            ->setParameter('val', false)
+            ->getQuery()
+            ->getResult();
+    }
 
     /*
     public function findOneBySomeField($value): ?Auctioneer

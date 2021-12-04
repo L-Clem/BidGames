@@ -7,6 +7,7 @@ use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
@@ -35,6 +36,7 @@ class Game
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
+    #[Groups(['read:Sale'])]
     private $estimation;
 
     /**
@@ -45,16 +47,13 @@ class Game
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="game")
      */
+    #[Groups(['read:Sale'])]
     private $categories;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Announce::class, mappedBy="game")
-     */
-    private $announces;
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="game")
      */
+    #[Groups(['read:Sale'])]
     private $picture;
 
     /**
@@ -65,18 +64,30 @@ class Game
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Sale'])]
     private $title;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(['read:Sale'])]
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Sale::class, mappedBy="game")
+     */
+    private $sales;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $invisbleFor;
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
-        $this->announces = new ArrayCollection();
         $this->picture = new ArrayCollection();
+        $this->sales = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,33 +171,6 @@ class Game
     }
 
     /**
-     * @return Collection|Announce[]
-     */
-    public function getAnnounces(): Collection
-    {
-        return $this->announces;
-    }
-
-    public function addAnnounce(Announce $announce): self
-    {
-        if (!$this->announces->contains($announce)) {
-            $this->announces[] = $announce;
-            $announce->addGame($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnounce(Announce $announce): self
-    {
-        if ($this->announces->removeElement($announce)) {
-            $announce->removeGame($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|File[]
      */
     public function getPicture(): Collection
@@ -248,6 +232,45 @@ class Game
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sale[]
+     */
+    public function getSales(): Collection
+    {
+        return $this->sales;
+    }
+
+    public function addSale(Sale $sale): self
+    {
+        if (!$this->sales->contains($sale)) {
+            $this->sales[] = $sale;
+            $sale->addGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSale(Sale $sale): self
+    {
+        if ($this->sales->removeElement($sale)) {
+            $sale->removeGame($this);
+        }
+
+        return $this;
+    }
+
+    public function getInvisbleFor(): ?string
+    {
+        return $this->invisbleFor;
+    }
+
+    public function setInvisbleFor(string $invisbleFor): self
+    {
+        $this->invisbleFor = $invisbleFor;
 
         return $this;
     }

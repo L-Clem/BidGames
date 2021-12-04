@@ -5,11 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FileRepository::class)
  */
-#[ApiResource]
+
 class File
 {
     /**
@@ -22,6 +23,7 @@ class File
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Sales', 'create:Sale'])]
     private $filename;
 
     /**

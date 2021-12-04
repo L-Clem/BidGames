@@ -7,35 +7,34 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * 
  */
 #[ApiResource]
-class User extends Person
+class User extends Individual
 {
 
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"person:read", "person:write"})
      */
     private $age;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"person:read", "person:write"})
      */
     private $verified;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="owner", orphanRemoval=true)
+     * @Groups({"person:read", "person:write"})
      */
     private $games;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Announce::class, mappedBy="favorites")
-     */
-    private $favorites;
 
     /**
      * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="user", orphanRemoval=true)
@@ -45,7 +44,6 @@ class User extends Person
     public function __construct()
     {
         $this->games = new ArrayCollection();
-        $this->favorites = new ArrayCollection();
         $this->purchaseOrders = new ArrayCollection();
     }
 
@@ -100,33 +98,6 @@ class User extends Person
             if ($game->getOwner() === $this) {
                 $game->setOwner(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Announce[]
-     */
-    public function getFavorites(): Collection
-    {
-        return $this->favorites;
-    }
-
-    public function addFavorite(Announce $favorite): self
-    {
-        if (!$this->favorites->contains($favorite)) {
-            $this->favorites[] = $favorite;
-            $favorite->addFavorite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFavorite(Announce $favorite): self
-    {
-        if ($this->favorites->removeElement($favorite)) {
-            $favorite->removeFavorite($this);
         }
 
         return $this;
