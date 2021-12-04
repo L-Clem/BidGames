@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\MeController;
 use App\Repository\IndividualRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -19,21 +23,47 @@ use Symfony\Component\Validator\Constraints\Length;
  * 
  * })
  */
-abstract class Individual implements UserInterface, PasswordAuthenticatedUserInterface
+#[ApiResource(
+    collectionOperations: [
+        'me' => [
+            'pagination_enabled' => false,
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+            'read' => false,
+            'security' => 'is_granted("ROLE_USER")',
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ]
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'controller' => NotFoundAction::class,
+            'openapi_context' => ['summary' => 'hidden'],
+            'read' => false,
+            'output' => false
+        ]
+    ],
+    normalizationContext: ['groups' => ['read:Individual']]
+
+)]
+
+class Individual implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Auctionners'])]
+    #[Groups(['read:Auctionners', 'read:Individual'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     #[
-        Groups(['read:Auctionners', 'create:Auctionner']),
+        Groups(['read:Auctionners', 'create:Auctionner', 'read:Individual']),
         Length(min: 2)
     ]
     private $email;
@@ -59,6 +89,7 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups(['read:Individual'])]
     private $roles = [];
 
     /**
@@ -81,9 +112,17 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
     #[Groups(['read:Auctionner', 'create:Auctionner'])]
     private $address;
 
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -218,5 +257,14 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
         $this->address = $address;
 
         return $this;
+    }
+
+    public static function createFromPayload($id, array $payload)
+    {
+        $individual = new Individual();
+        $individual->setId($id);
+        $individual->setEmail($payload['email'] ?? '');
+
+        return $individual;
     }
 }

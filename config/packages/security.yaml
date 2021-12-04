@@ -13,6 +13,9 @@ security:
         class: App\Entity\Individual
         property: email
     # used to reload user from session & other features (e.g. switch_user)
+    jwt:
+      lexik_jwt:
+        class: App\Entity\Individual
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -20,13 +23,16 @@ security:
     login:
       pattern: ^/api/login
       stateless: true
+      provider: app_user_provider
       json_login:
         check_path: /api/login
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
     api:
+      provider: jwt
       pattern: ^/api
       stateless: true
+      # anonymous: true
       guard:
         authenticators:
           - lexik_jwt_authentication.jwt_token_authenticator
@@ -35,7 +41,8 @@ security:
     #   provider: app_user_provider
     #   json_login:
     #     check_path: api_login
-    #     success_handler:
+    # logout:
+    #   path: api_logout
 
     # activate different ways to authenticate
     # https://symfony.com/doc/current/security.html#the-firewall
