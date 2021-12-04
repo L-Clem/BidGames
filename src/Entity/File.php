@@ -23,7 +23,7 @@ class File
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Announces', 'create:Announce'])]
+    #[Groups(['read:Sales', 'create:Sale'])]
     private $filename;
 
     /**

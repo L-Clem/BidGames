@@ -25,7 +25,7 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Announce'])]
+    #[Groups(['read:Sale'])]
     private $name;
 
     /**
