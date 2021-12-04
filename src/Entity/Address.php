@@ -41,11 +41,11 @@ class Address
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["create:AuctionHouse"], 'create:Auctionner')]
+    #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
     private $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Department::class)
+     * @ORM\ManyToOne(targetEntity=Department::class )
      * @ORM\JoinColumn(nullable=false)
      */
     #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
