@@ -59,8 +59,8 @@ class AuctionHouse
     private $auctioneers;
 
     /**
-     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist"} )
+     * 
      */
     #[Groups(['read:Auctionner', 'read:AuctionHouses', 'create:AuctionHouse'])]
     private $address;

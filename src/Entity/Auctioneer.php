@@ -116,7 +116,7 @@ class Auctioneer extends Individual
         return $this->bids;
     }
 
-    public function addBid(Bid $bid): self
+    public function addBid(?Bid $bid): self
     {
         if (!$this->bids->contains($bid)) {
             $this->bids[] = $bid;
@@ -126,7 +126,7 @@ class Auctioneer extends Individual
         return $this;
     }
 
-    public function removeBid(Bid $bid): self
+    public function removeBid(?Bid $bid): self
     {
         if ($this->bids->removeElement($bid)) {
             // set the owning side to null (unless already changed)
@@ -158,7 +158,7 @@ class Auctioneer extends Individual
         return $this->games;
     }
 
-    public function addGame(Game $game): self
+    public function addGame(?Game $game): self
     {
         if (!$this->games->contains($game)) {
             $this->games[] = $game;
