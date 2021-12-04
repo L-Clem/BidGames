@@ -8,13 +8,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends AbstractController
 {
 
-    #[Route(path: 'api/login', name: 'api_login', methods: ['POST'])]
-    public function  apiLogin()
+    #[Route(path: '/api/login', name: 'api_login', methods: ['POST'])]
+    public function  login()
     {
         $person = $this->getUser();
         return $this->json([
             'username' => $person->getUserIdentifier(),
-            'role' => $person->getRoles(),
+            'roles' => $person->getRoles(),
         ]);
+    }
+
+
+    #[Route(path: '/api/logout', name: 'api_logout', methods: ['POST'])]
+    public function  logout()
+    {
     }
 }
