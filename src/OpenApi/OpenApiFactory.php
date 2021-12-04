@@ -47,6 +47,7 @@ class OpenApiFactory implements OpenApiFactoryInterface
             ]
         ]);
 
+
         $schemas['Token'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
@@ -54,9 +55,24 @@ class OpenApiFactory implements OpenApiFactoryInterface
                     'type' => 'string',
                     'readOnly' => true,
                 ],
+                'refresh_token' => [
+                    'type' => 'string',
+                    'readOnly' => true,
+                ],
 
             ]
         ]);
+
+        $schemas['refreshToken'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'refresh_token' => [
+                    'type' => 'string',
+                ],
+
+            ]
+        ]);
+
         $pathItem = new PathItem(
             post: new Operation(
                 operationId: 'postApiLogin',
@@ -84,8 +100,36 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 ]
             )
         );
+        $pathToken = new PathItem(
+            post: new Operation(
+                operationId: 'postApiRefreshToken',
+                tags: ['Auth'],
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/refreshToken',
+                            ]
+                        ]
+                    ])
+                ),
+                responses: [
+                    '200' => [
+                        'description' => 'Token JWT',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Token',
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            )
+        );
 
         $openApi->getPaths()->addPath('/api/login', $pathItem);
+        $openApi->getPaths()->addPath('/api/token/resfresh', $pathToken);
 
 
         return $openApi;
