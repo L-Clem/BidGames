@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AnnounceBidRepository;
+use App\Repository\SaleBidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=AnnounceBidRepository::class)
+ * @ORM\Entity(repositoryClass=SaleBidRepository::class)
  */
-#[ApiResource]
-class AnnounceBid
+class SaleBid
 {
     /**
      * @ORM\Id
@@ -42,19 +40,19 @@ class AnnounceBid
     private $reservePrice;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Bid::class, inversedBy="announceBids")
+     * @ORM\ManyToOne(targetEntity=Bid::class, inversedBy="saleBids")
      * @ORM\JoinColumn(nullable=false)
      */
     private $bid;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Announce::class, inversedBy="announceBids")
+     * @ORM\ManyToOne(targetEntity=Sale::class, inversedBy="saleBids")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $announce;
+    private $sale;
 
     /**
-     * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="announceBid", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="saleBid")
      */
     private $purchaseOrders;
 
@@ -128,42 +126,42 @@ class AnnounceBid
         return $this;
     }
 
-    public function getAnnounce(): ?Announce
+    public function getSale(): ?sale
     {
-        return $this->announce;
+        return $this->sale;
     }
 
-    public function setAnnounce(?Announce $announce): self
+    public function setSale(?sale $sale): self
     {
-        $this->announce = $announce;
+        $this->sale = $sale;
 
         return $this;
     }
 
     /**
-     * @return Collection|PurchaseOrder[]
+     * @return Collection|purchaseOrder[]
      */
     public function getPurchaseOrders(): Collection
     {
         return $this->purchaseOrders;
     }
 
-    public function addPurchaseOrder(PurchaseOrder $purchaseOrder): self
+    public function addPurchaseOrder(purchaseOrder $purchaseOrder): self
     {
         if (!$this->purchaseOrders->contains($purchaseOrder)) {
             $this->purchaseOrders[] = $purchaseOrder;
-            $purchaseOrder->setAnnounceBid($this);
+            $purchaseOrder->setSaleBid($this);
         }
 
         return $this;
     }
 
-    public function removePurchaseOrder(PurchaseOrder $purchaseOrder): self
+    public function removePurchaseOrder(purchaseOrder $purchaseOrder): self
     {
         if ($this->purchaseOrders->removeElement($purchaseOrder)) {
             // set the owning side to null (unless already changed)
-            if ($purchaseOrder->getAnnounceBid() === $this) {
-                $purchaseOrder->setAnnounceBid(null);
+            if ($purchaseOrder->getSaleBid() === $this) {
+                $purchaseOrder->setSaleBid(null);
             }
         }
 

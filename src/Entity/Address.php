@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AddressRepository::class)
@@ -22,38 +23,39 @@ class Address
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
     private $streetNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
     private $streetName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
     private $addressComplement;
 
     /**
-     * @ORM\Column(type="string", length=5)
-     */
-    private $postalCode;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
-    private $city;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
     private $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Department::class)
+     * @ORM\ManyToOne(targetEntity=Department::class )
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
     private $department;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Bid::class)
+     * * @ORM\JoinColumn(nullable=true)
+     */
+    private $bid;
 
     public function getId(): ?int
     {
@@ -92,30 +94,6 @@ class Address
     public function setAddressComplement(?string $addressComplement): self
     {
         $this->addressComplement = $addressComplement;
-
-        return $this;
-    }
-
-    public function getPostalCode(): ?string
-    {
-        return $this->postalCode;
-    }
-
-    public function setPostalCode(string $postalCode): self
-    {
-        $this->postalCode = $postalCode;
-
-        return $this;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
 
         return $this;
     }
