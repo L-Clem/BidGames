@@ -80,11 +80,6 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
     #[Groups(['read:Auctionner', 'create:Auctionner'])]
     private $address;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $role;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -220,18 +215,6 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
     public function setAddress(Address $address): self
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function getRole(): ?bool
-    {
-        return $this->role;
-    }
-
-    public function setRole(bool $role): self
-    {
-        $this->role = $role;
 
         return $this;
     }
