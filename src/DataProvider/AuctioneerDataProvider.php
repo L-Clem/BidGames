@@ -6,11 +6,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryResultCollectionExtensio
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
+use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Auctioneer;
 use App\Repository\AuctioneerRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class AuctioneerDataProvider implements ContextAwareCollectionDataProviderInterface
+class AuctioneerDataProvider implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface
 {
 
     private $collectionExtensions;

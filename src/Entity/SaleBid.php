@@ -46,13 +46,13 @@ class SaleBid
     private $bid;
 
     /**
-     * @ORM\ManyToOne(targetEntity=sale::class, inversedBy="saleBids")
+     * @ORM\ManyToOne(targetEntity=Sale::class, inversedBy="saleBids")
      * @ORM\JoinColumn(nullable=false)
      */
     private $sale;
 
     /**
-     * @ORM\OneToMany(targetEntity=purchaseOrder::class, mappedBy="saleBid")
+     * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="saleBid")
      */
     private $purchaseOrders;
 

@@ -23,30 +23,32 @@ class Address
     /**
      * @ORM\Column(type="smallint")
      */
-    #[Groups(['read:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
     private $streetNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
     private $streetName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['read:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
     private $addressComplement;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["create:AuctionHouse"], 'create:Auctionner')]
     private $country;
 
     /**
      * @ORM\ManyToOne(targetEntity=Department::class)
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
     private $department;
 
     /**

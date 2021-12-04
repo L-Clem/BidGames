@@ -2,16 +2,73 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\SaleCountFavorites;
 use App\Repository\SaleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SaleRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Sale', 'read:Sales']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:Sale', 'create:Sale']]
+        ],
+        'delete',
+        'countFavorites' => [
+            'method' => 'GET',
+            'path' => '/sales/{id}/favorites/count',
+            'controller' => SaleCountFavorites::class,
+            'openapi_context' => [
+                'summary' => 'Give you the favorites users number who favorite your sale ',
+                'responses' => [
+                    '200' => [
+                        'description' => 'OK',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'integer',
+                                    'example' => 5
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Sales']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:Sale']]
+        ],
+    ],
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: ['title' => 'partial', 'game.title' => 'partial', 'tag.name' => 'partial'],
+)]
+
+#[ApiFilter(
+    DateFilter::class,
+    properties: ['publishedAt']
+)]
+
 class Sale
 {
     /**
@@ -19,11 +76,13 @@ class Sale
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Sales'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Sales', 'create:Sale'])]
     private $title;
 
     /**

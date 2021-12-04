@@ -36,7 +36,7 @@ class Game
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
-    #[Groups(['read:Announce'])]
+    #[Groups(['read:Sale'])]
     private $estimation;
 
     /**
@@ -47,13 +47,13 @@ class Game
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="game")
      */
-    #[Groups(['read:Announce'])]
+    #[Groups(['read:Sale'])]
     private $categories;
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="game")
      */
-    #[Groups(['read:Announce'])]
+    #[Groups(['read:Sale'])]
     private $picture;
 
     /**
@@ -64,13 +64,13 @@ class Game
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Announce'])]
+    #[Groups(['read:Sale'])]
     private $title;
 
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['read:Announce'])]
+    #[Groups(['read:Sale'])]
     private $description;
 
     /**
