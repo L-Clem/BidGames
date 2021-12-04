@@ -5,11 +5,11 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use App\Entity\Announce;
+use App\Entity\Sale;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class AnnounceDataPersister implements ContextAwareDataPersisterInterface
+class SaleDataPersister implements ContextAwareDataPersisterInterface
 {
 
     /**
@@ -32,7 +32,7 @@ class AnnounceDataPersister implements ContextAwareDataPersisterInterface
     }
     public function supports($data, array $context = []): bool
     {
-        return $data instanceof Announce;
+        return $data instanceof Sale;
     }
 
     public function persist($data, array $context = [])

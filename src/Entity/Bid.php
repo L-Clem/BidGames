@@ -131,7 +131,6 @@ class Bid
                 $saleBid->setBid(null);
             }
         }
-
         return $this;
     }
 }

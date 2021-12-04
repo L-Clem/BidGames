@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\AuctionHouseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +13,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=AuctionHouseRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:AuctionHouse', 'read:AuctionHouses']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:AuctionHouse', 'create:AuctionHouse']]
+        ],
+        'delete',
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:AuctionHouses']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:AuctionHouse']]
+        ],
+    ],
+
+)]
 class AuctionHouse
 {
     /**
@@ -20,24 +43,26 @@ class AuctionHouse
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:AuctionHouses'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse"])]
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Auctioneer::class, mappedBy="auctionHouse")
      */
+    #[ApiSubresource()]
     private $auctioneers;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['read:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', 'create:AuctionHouse'])]
     private $address;
 
     public function __construct()
