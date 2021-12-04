@@ -65,6 +65,7 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
+    #[Groups(['create:Auctionner'])]
     private $password;
 
     /**
@@ -75,7 +76,7 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     *
      */
     #[Groups(['read:Auctionner', 'create:Auctionner'])]
     private $address;
@@ -152,7 +153,7 @@ abstract class Individual implements UserInterface, PasswordAuthenticatedUserInt
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(?array $roles): self
     {
         $this->roles = $roles;
 
