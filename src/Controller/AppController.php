@@ -13,8 +13,14 @@ class AppController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('app/index.html.twig', [
-            'controller_name' => 'AppController',
-        ]);
+        return $this->render('app/index.twig');
+    }
+
+    /**
+     * @Route("/about_us", name="about_us")
+     */
+    public function aboutUs(): Response
+    {
+        return $this->render('app/about_us.twig');
     }
 }
