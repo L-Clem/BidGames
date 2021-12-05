@@ -7,11 +7,34 @@ use App\Repository\DepositAddressRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=DepositAddressRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:DepositAdress', 'read:DepositAdresses']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:DepositAdress', 'create:DepositAdress']]
+        ],
+        'delete',
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:DepositAdresses']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:DepositAdress']]
+        ],
+    ],
+
+)]
 class DepositAddress
 {
     /**
@@ -19,17 +42,20 @@ class DepositAddress
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:DepositAdresses'])]
     private $id;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="depositAddress")
      */
+    #[Groups(['read:DepositAdresses'])]
     private $game;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Game', 'create:DepositAdress'])]
     private $address;
 
     public function __construct()

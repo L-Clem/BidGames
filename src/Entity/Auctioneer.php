@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use App\Controller\AuctioneerAddGameController;
 use App\Controller\AuctioneerToggleActivationController;
 use App\Repository\AuctioneerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,7 +44,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     ]
                 ]
             ]
-        ]
+        ],
+        // 'addGame' => [
+        //     'method' => 'POST',
+        //     'path' => '/auctioneers/{id}/addGame',
+        //     'controller' => AuctioneerAddGameController::class,
+        //     'openapi_context' => [
+        //         'summary' => 'allow to add a game to an auctioneer',
+        //         'requestBody' => [
+        //             'content' => [
+        //                 'application/json' => [
+        //                     'schema' => [
+        //                         'type'       => 'object',
+        //                         'properties' =>
+        //                         [
+        //                             'game'        => [
+        //                                 'type' => 'array',
+        //                                 'items' => ['type' => 'string']
+        //                             ],
+        //                         ],
+        //                     ],
+        //                 ]
+        //             ]
+        //         ]
+        //     ]
+        // ]
     ],
     collectionOperations: [
         'get' => [
@@ -70,21 +95,25 @@ class Auctioneer extends Individual
      * @ORM\OneToMany(targetEntity=Bid::class, mappedBy="auctioneer")
      */
     #[Groups(['update:Auctionner'])]
-    #[ApiSubresource()]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $bids;
 
     /**
      * @ORM\ManyToOne(targetEntity=AuctionHouse::class, inversedBy="auctioneers")
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['read:Auctionner', 'create:Auctionner'])]
+    #[Groups(['read:Auctionner', 'create:Auctionner', 'read:Bid'])]
     private $auctionHouse;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="auctioneer")
      */
     #[Groups(['update:Auctionner'])]
-    #[ApiSubresource()]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $games;
 
     public function __construct()

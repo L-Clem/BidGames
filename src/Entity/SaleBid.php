@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SaleBidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SaleBidRepository::class)
  */
+
 class SaleBid
 {
     /**
@@ -17,32 +20,38 @@ class SaleBid
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Sale', 'read:Bid'])]
     private $id;
 
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups(['read:Sale', 'read:Bid', 'update:Bid'])]
     private $sold;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
+    #[Groups(['read:Sale', 'read:Bid'])]
     private $startingPrice;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
+    #[Groups(['read:Sale', 'read:Bid', 'update:Bid'])]
     private $soldAtPrice;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
+    #[Groups(['read:Sale', 'read:Bid'])]
     private $reservePrice;
 
     /**
      * @ORM\ManyToOne(targetEntity=Bid::class, inversedBy="saleBids")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Sale'])]
     private $bid;
 
     /**
@@ -54,6 +63,7 @@ class SaleBid
     /**
      * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="saleBid")
      */
+    #[Groups(['read:Bid'])]
     private $purchaseOrders;
 
     public function __construct()
