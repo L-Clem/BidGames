@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=AddressRepository::class)
  */
-#[ApiResource]
+
 class Address
 {
     /**
@@ -23,39 +23,35 @@ class Address
     /**
      * @ORM\Column(type="smallint")
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
     private $streetNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
     private $streetName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
     private $addressComplement;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
+    #[Groups(["create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User'])]
     private $country;
 
     /**
      * @ORM\ManyToOne(targetEntity=Department::class )
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(["create:AuctionHouse", 'create:Auctionner'])]
+    #[Groups(["create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'create:User'])]
     private $department;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Bid::class)
-     * * @ORM\JoinColumn(nullable=true)
-     */
-    private $bid;
+
 
     public function getId(): ?int
     {

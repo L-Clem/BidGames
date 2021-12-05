@@ -49,20 +49,22 @@ class AuctionHouse
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse"])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'read:Bid'])]
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Auctioneer::class, mappedBy="auctionHouse")
      */
-    #[ApiSubresource()]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $auctioneers;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist"} )
      * 
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', 'create:AuctionHouse'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', 'create:AuctionHouse', 'read:Bid'])]
     private $address;
 
     public function __construct()
