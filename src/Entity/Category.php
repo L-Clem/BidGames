@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +13,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Category', 'read:Categorys']]
+        ],
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Categorys']]
+        ],
+
+    ],
+
+)]
 class Category
 {
     /**
@@ -20,17 +37,21 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Categorys'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'read:Categorys', 'read:Sale'])]
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="categories")
      */
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $game;
 
     public function __construct()
