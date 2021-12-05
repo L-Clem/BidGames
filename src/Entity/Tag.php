@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +13,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Tag', 'read:Tags']]
+        ],
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Tags']]
+        ],
+
+    ],
+
+)]
+
 class Tag
 {
     /**
@@ -25,12 +43,15 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Tags'])]
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Sale::class, mappedBy="tags")
      */
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $sales;
 
     public function __construct()

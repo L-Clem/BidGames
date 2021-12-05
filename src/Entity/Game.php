@@ -12,7 +12,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Game', 'read:Games']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:Game', 'create:Game']]
+        ],
+        'delete',
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Games']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:Game']]
+        ],
+    ],
+
+)]
 class Game
 {
     /**
@@ -20,66 +42,72 @@ class Game
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Game', 'read:DepositAdress', 'read:Sale'])]
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="games")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Game', 'create:Game', 'read:Sale'])]
     private $owner;
 
     /**
      * @ORM\ManyToOne(targetEntity=Auctioneer::class, inversedBy="games")
      */
+    #[Groups(['read:Game', 'create:Game', 'read:Sale'])]
     private $auctioneer;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:Sale'])]
     private $estimation;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean",options={"default": "0"})
      */
+    #[Groups(['read:Games', 'read:Sale'])]
     private $forSale;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="game")
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:Sale'])]
     private $categories;
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="game")
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:DepositAdress', 'read:User', 'read:Sale'])]
     private $picture;
 
     /**
      * @ORM\ManyToOne(targetEntity=DepositAddress::class, inversedBy="game")
      */
+    #[Groups(['read:Game', 'create:Game'])]
     private $depositAddress;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:DepositAdress', 'read:Sale'])]
     private $title;
 
     /**
      * @ORM\Column(type="text")
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Game', 'create:Game', 'read:Sale'])]
     private $description;
 
     /**
      * @ORM\ManyToMany(targetEntity=Sale::class, mappedBy="game")
      */
+    #[Groups(['read:Sale'])]
     private $sales;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $invisbleFor;
 
