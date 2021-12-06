@@ -105,6 +105,9 @@
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v0.12.0"
     },
+    "jms/metadata": {
+        "version": "2.6.1"
+    },
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
@@ -319,13 +322,16 @@
     "symfony/options-resolver": {
         "version": "v5.4.0"
     },
+    "symfony/mime": {
+        "version": "v5.4.0"
+    },
     "symfony/password-hasher": {
         "version": "v5.4.0"
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.23.1"
     },
-    "symfony/polyfill-intl-icu": {
+    "symfony/polyfill-intl-idn": {
         "version": "v1.23.0"
     },
     "symfony/polyfill-intl-normalizer": {
@@ -478,6 +484,18 @@
     },
     "twig/twig": {
         "version": "v3.3.4"
+    },
+    "vich/uploader-bundle": {
+        "version": "1.18",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.7",
+            "ref": "c4f5755b37fb65b9c6a3cbdae91205c15a137ed4"
+        },
+        "files": [
+            "./config/packages/vich_uploader.yaml"
+        ]
     },
     "webmozart/assert": {
         "version": "1.10.0"

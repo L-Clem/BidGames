@@ -5,11 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PurchaseOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PurchaseOrderRepository::class)
  */
-#[ApiResource]
+
 class PurchaseOrder
 {
     /**
@@ -22,17 +23,20 @@ class PurchaseOrder
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
+    #[Groups(['read:Bid'])]
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['read:Bid'])]
     private $emissionTime;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="purchaseOrders")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Bid'])]
     private $user;
 
     /**
