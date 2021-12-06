@@ -51,6 +51,11 @@ class Address
     #[Groups(["create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'create:User'])]
     private $department;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Bid::class)
+     * * @ORM\JoinColumn(nullable=true)
+     */
+    private $bid;
 
 
     public function getId(): ?int
