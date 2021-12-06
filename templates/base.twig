@@ -19,29 +19,39 @@
         {% endblock %}
     </head>
     <body>
-        <header>
-            {% block header %}
-                <nav>
-                    <div>
-                        <span id="logo">BIDGAMES</span>
-                    </div>
-                    {% block nav %}
-                        <div class="nav-links">
-                            <a href="#">Sign in/Register</a>
+        <div class="body-container">
+            <header>
+                {% block header %}
+                    <nav>
+                        <div>
+                            <span id="logo">BIDGAMES</span>
                         </div>
-                    {% endblock %}
-                </nav>
+                        {% block nav %}
+                            <div class="nav-links">
+                                <a href="#">Sign in/Register</a>
+                            </div>
+                        {% endblock %}
+                    </nav>
 
-                <div class="search-container"></div>
-            {% endblock %}
-        </header>
-        
-        
-        {% block body %}{% endblock %}
+                    <div class="search-container">
+                        <div id="category-dropdown"></div>
+                        <div class="search-bar">
+                            <div id="search-box"></div>
+                            <div id="searchbar-dropdown"></div>
+                        </div>
+                        
+                    </div>
+                {% endblock %}
+            </header>
+            
+            {% block body %}{% endblock %}
+
+        </div>
 
         <footer>
             {% block footer %}
-                <div class="footer-links">
+                <div class="footer-container">
+                    <div class="footer-links">
                     <div class="footer-column">
                         <a href="#">About Us</a>
                         <a href="#">Contact</a>
@@ -52,11 +62,13 @@
                         <a href="#">Some Policy</a>
                         <a href="#">Cookies</a>
                     </div>
-                </div>
-                <div class="brand">
-                    <span>Copyright © 2021 EPSI Team</span>
+                    </div>
+                    <div class="brand">
+                        <span>Copyright © 2021 EPSI Team</span>
+                    </div>
                 </div>
             {% endblock %}
         </footer>
+        
     </body>
 </html>
