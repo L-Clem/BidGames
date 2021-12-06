@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\PostImageController;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,6 +33,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'post' => [
             'denormalization_context' => ['groups' => ['create:Game']]
         ],
+        'addImage' => [
+            'method' => 'POST',
+            'controller' => PostImageController::class,
+            'path' => '/games/{id}/image',
+            'deserialize' => false,
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
+        ],
     ],
 
 )]
@@ -54,12 +79,14 @@ class Game
 
     /**
      * @ORM\ManyToOne(targetEntity=Auctioneer::class, inversedBy="games")
+     *   @ORM\JoinColumn(nullable=true)
      */
     #[Groups(['read:Game', 'create:Game', 'read:Sale'])]
     private $auctioneer;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * 
      */
     #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:Sale'])]
     private $estimation;
@@ -68,7 +95,7 @@ class Game
      * @ORM\Column(type="boolean",options={"default": "0"})
      */
     #[Groups(['read:Games', 'read:Sale'])]
-    private $forSale;
+    private $forSale = false;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="game")
@@ -78,12 +105,14 @@ class Game
 
     /**
      * @ORM\OneToMany(targetEntity=File::class, mappedBy="game")
+     *  @ORM\JoinColumn(nullable=true)
      */
-    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:DepositAdress', 'read:User', 'read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'read:DepositAdress', 'read:User', 'read:Sale'])]
     private $picture;
 
     /**
      * @ORM\ManyToOne(targetEntity=DepositAddress::class, inversedBy="game")
+     *   @ORM\JoinColumn(nullable=true)
      */
     #[Groups(['read:Game', 'create:Game'])]
     private $depositAddress;
@@ -206,7 +235,7 @@ class Game
         return $this->picture;
     }
 
-    public function addPicture(File $picture): self
+    public function addPicture(?File $picture): self
     {
         if (!$this->picture->contains($picture)) {
             $this->picture[] = $picture;
@@ -272,7 +301,7 @@ class Game
         return $this->sales;
     }
 
-    public function addSale(Sale $sale): self
+    public function addSale(?Sale $sale): self
     {
         if (!$this->sales->contains($sale)) {
             $this->sales[] = $sale;
@@ -282,7 +311,7 @@ class Game
         return $this;
     }
 
-    public function removeSale(Sale $sale): self
+    public function removeSale(?Sale $sale): self
     {
         if ($this->sales->removeElement($sale)) {
             $sale->removeGame($this);

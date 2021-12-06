@@ -26,6 +26,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'normalization_context' => ['groups' => ['read:Categorys']]
         ],
+        'post' => [
+            'normalization_context' => ['groups' => ['create:Category']]
+        ],
 
     ],
 
@@ -43,11 +46,12 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Games', 'read:Categorys', 'read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'read:Categorys', 'read:Sale', 'create:Category'])]
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="categories")
+     * @ORM\JoinColumn(nullable=false)
      */
     #[ApiSubresource(
         maxDepth: 1,
