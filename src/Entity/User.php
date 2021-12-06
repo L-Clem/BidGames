@@ -57,7 +57,7 @@ class User extends Individual
 
 
     /**
-     * @ORM\Column(type="Date")
+     * @ORM\Column(type="date")
      * @Groups({"person:read", "person:write"})
      */
     #[Groups(['read:Users', 'create:User'])]
