@@ -1,6 +1,9 @@
+const { ESLint } = require("eslint");
+
 module.exports = {
     extends: ['eslint:recommended', 'plugin:react/recommended'],
     parserOptions: {
+        parser: "babel-eslint",
         ecmaVersion: 6,
         sourceType: 'module',
         ecmaFeatures: {

@@ -1,5 +1,13 @@
 body {
     background-color: white;
+    width: 100vw;
+    font-family: 'Lato';
+}
+
+.body-container {
+    padding: 0 100px;
+    margin: 30px auto 0 auto;
+
 }
 
 #logo {
@@ -11,23 +19,50 @@ nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border-bottom: 1px solid #868D8F;
 }
 
 .nav-links {
-    margin-right: 5vw;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border-bottom: 1px solid #868D8F;
+}
+
+.search-bar {
+    padding: 0 10px;
 }
 
 footer {
+    border-top: 1px solid #868D8F;
+}
+
+.footer-container {
+    padding: 0 100px;
     display: flex;
     flex-direction: row;
-    width: 100vw;
 }
 
 .footer-links {
     display: flex;
     flex-direction: row;
-    flex: 1 1 70%;
-    justify-content: space-evenly;
+    flex: 1 1 60%;
+    justify-content: space-between;
+    padding-right: 150px;
+    
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #55585A;
+    line-height: 30px;
+    font-size: 16px;
 }
 
 .footer-column {
@@ -37,7 +72,12 @@ footer {
 }
 
 .brand {
+    display: flex;
+    justify-content: flex-end;
     align-self: flex-end;
-    flex: 1 1 30%;
+    flex: 1 1 20%;
 }
 
+.homepage-content {
+    height: 200px;
+}
