@@ -35,9 +35,7 @@ class SaleBid
     #[Groups(['read:Sale', 'read:Bid'])]
     private $startingPrice;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     */
+
     #[Groups(['read:Sale', 'read:Bid', 'update:Bid'])]
     private $soldAtPrice;
 

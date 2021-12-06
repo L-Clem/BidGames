@@ -88,7 +88,7 @@ class Game
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      * 
      */
-    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'read:Sale'])]
     private $estimation;
 
     /**

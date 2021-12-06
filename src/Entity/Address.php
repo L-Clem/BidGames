@@ -39,23 +39,16 @@ class Address
     private $addressComplement;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    #[Groups(["create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User'])]
-    private $country;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Department::class )
-     * @ORM\JoinColumn(nullable=false)
-     */
-    #[Groups(["create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'create:User'])]
-    private $department;
-
-    /**
      * @ORM\OneToOne(targetEntity=Bid::class)
      * * @ORM\JoinColumn(nullable=true)
      */
     private $bid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=City::class, inversedBy="addresses")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $city;
 
 
     public function getId(): ?int
@@ -99,26 +92,36 @@ class Address
         return $this;
     }
 
-    public function getCountry(): ?string
+
+
+    public function getCity(): ?City
     {
-        return $this->country;
+        return $this->city;
     }
 
-    public function setCountry(string $country): self
+    public function setCity(?City $city): self
     {
-        $this->country = $country;
+        $this->city = $city;
 
         return $this;
     }
 
-    public function getDepartment(): ?Department
+    /**
+     * Get the value of bid
+     */
+    public function getBid()
     {
-        return $this->department;
+        return $this->bid;
     }
 
-    public function setDepartment(?Department $department): self
+    /**
+     * Set the value of bid
+     *
+     * @return  self
+     */
+    public function setBid($bid)
     {
-        $this->department = $department;
+        $this->bid = $bid;
 
         return $this;
     }
