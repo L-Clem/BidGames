@@ -64,10 +64,10 @@ class User extends Individual
     private $age;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean",options={"default": "0"})
      * @Groups({"person:read", "person:write"})
      */
-    private $verified;
+    private $verified = false;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="owner", orphanRemoval=true)
@@ -80,6 +80,7 @@ class User extends Individual
 
     /**
      * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $purchaseOrders;
 
