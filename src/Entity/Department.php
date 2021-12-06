@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -54,6 +56,16 @@ class Department
     #[Groups(["read:Departments"])]
     private $region;
 
+    /**
+     * @ORM\OneToMany(targetEntity=City::class, mappedBy="Department", orphanRemoval=true)
+     */
+    private $cities;
+
+    public function __construct()
+    {
+        $this->cities = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +103,36 @@ class Department
     public function setRegion(?Region $region): self
     {
         $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|City[]
+     */
+    public function getCities(): Collection
+    {
+        return $this->cities;
+    }
+
+    public function addCity(City $city): self
+    {
+        if (!$this->cities->contains($city)) {
+            $this->cities[] = $city;
+            $city->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCity(City $city): self
+    {
+        if ($this->cities->removeElement($city)) {
+            // set the owning side to null (unless already changed)
+            if ($city->getDepartment() === $this) {
+                $city->setDepartment(null);
+            }
+        }
 
         return $this;
     }
