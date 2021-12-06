@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,31 +14,73 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * 
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:User', 'read:Users']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:User', 'create:User']]
+        ],
+        'delete',
+        'toggleActivation' => [
+            'method' => 'POST',
+            'path' => '/auctioneers/{id}/toggleActivation',
+            'controller' => UserToggleActivationController::class,
+            'openapi_context' => [
+                'summary' => 'allow to activate or desactivate an User',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [],
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Users']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:User']]
+        ],
+    ],
+
+)]
 class User extends Individual
 {
 
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="date")
      * @Groups({"person:read", "person:write"})
      */
-    private $age;
+    #[Groups(['read:Users', 'create:User'])]
+    private $BirthDate;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean",options={"default": "0"})
      * @Groups({"person:read", "person:write"})
      */
-    private $verified;
+    private $verified = false;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="owner", orphanRemoval=true)
      * @Groups({"person:read", "person:write"})
      */
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $games;
 
     /**
      * @ORM\OneToMany(targetEntity=PurchaseOrder::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $purchaseOrders;
 

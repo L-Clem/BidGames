@@ -3,15 +3,39 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BidRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Bid', 'read:Bids']]
+        ],
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:Bid', 'create:Bid']]
+        ],
+        'delete',
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Bids']]
+        ],
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:Bid']]
+        ],
+    ],
+
+)]
 class Bid
 {
     /**
@@ -19,22 +43,26 @@ class Bid
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Bids'])]
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['read:Bids', 'create:Bid', 'read:Sale'])]
     private $startHour;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['read:Bids', 'create:Bid', 'read:Sale'])]
     private $endHour;
 
     /**
      * @ORM\ManyToOne(targetEntity=Auctioneer::class, inversedBy="bids")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
+    #[Groups(['read:Bid', 'create:Bid'])]
     private $auctioneer;
 
     /**
@@ -44,7 +72,9 @@ class Bid
 
     /**
      * @ORM\OneToMany(targetEntity=SaleBid::class, mappedBy="bid")
+     * @ORM\JoinColumn(nullable=true)
      */
+    #[Groups(['read:Bid', 'update:Bid'])]
     private $saleBids;
 
     public function __construct()
@@ -93,15 +123,14 @@ class Bid
         return $this;
     }
 
+
     public function getAddress(): ?Address
     {
         return $this->address;
     }
-
     public function setAddress(?Address $address): self
     {
         $this->address = $address;
-
         return $this;
     }
 

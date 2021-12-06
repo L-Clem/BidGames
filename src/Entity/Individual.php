@@ -58,23 +58,24 @@ class Individual implements UserInterface, PasswordAuthenticatedUserInterface, J
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Auctionners', 'read:Individual'])]
+    #[Groups(['read:Auctionners', 'read:Individual', 'read:Game', 'read:Users'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     #[
-        Groups(['read:Auctionners', 'create:Auctionner', 'read:Individual']),
+        Groups(['read:Auctionners', 'create:Auctionner', 'read:Individual', 'read:Game', 'read:Users', 'create:User', 'read:Bid']),
         Length(min: 2)
     ]
+
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     #[
-        Groups(['read:Auctionners', 'create:Auctionner']),
+        Groups(['read:Auctionners', 'create:Auctionner', 'read:Game', 'read:Users', 'create:User', 'read:Bid']),
         Length(min: 2)
     ]
     private $firstname;
@@ -83,7 +84,7 @@ class Individual implements UserInterface, PasswordAuthenticatedUserInterface, J
      * @ORM\Column(type="string", length=255)
      */
     #[
-        Groups(['read:Auctionners', 'create:Auctionner']),
+        Groups(['read:Auctionners', 'create:Auctionner', 'read:Game', 'read:Users', 'create:User', 'read:Bid']),
         Length(min: 2)
     ]
     private $lastname;
@@ -104,7 +105,7 @@ class Individual implements UserInterface, PasswordAuthenticatedUserInterface, J
      * 
      * @SerializedName("password")
      */
-    #[Groups(['create:Auctionner'])]
+    #[Groups(['create:Auctionner', 'create:User'])]
     private $plainPassword;
 
     /**
@@ -117,7 +118,7 @@ class Individual implements UserInterface, PasswordAuthenticatedUserInterface, J
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      *
      */
-    #[Groups(['read:Auctionner', 'create:Auctionner'])]
+    #[Groups(['read:Auctionner', 'create:Auctionner', 'read:User', 'create:User'])]
     private $address;
 
 

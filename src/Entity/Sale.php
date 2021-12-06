@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\SaleCountFavorites;
@@ -57,6 +58,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'post' => [
             'denormalization_context' => ['groups' => ['create:Sale']]
         ],
+        'addImage' => [
+            'method' => 'POST',
+            'controller' => PostImageController::class,
+            'path' => '/games/{id}/image',
+            'deserialize' => false,
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
+        ],
     ],
 )]
 #[ApiFilter(
@@ -88,26 +113,31 @@ class Sale
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Sale', 'create:Sale'])]
     private $description;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Sale'])]
     private $lotNumber;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['read:Sale'])]
     private $publishedAt;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Sale', 'create:Sale'])]
     private $tax;
 
     /**
      * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="sales")
      */
+    #[Groups(['read:Sale', 'create:Sale'])]
     private $game;
 
     /**
@@ -119,16 +149,20 @@ class Sale
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Sale'])]
     private $picture;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="sales")
      */
+    #[Groups(['read:Sale'])]
     private $tags;
 
     /**
      * @ORM\OneToMany(targetEntity=SaleBid::class, mappedBy="sale", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
+    #[Groups(['update:Auctionner', 'read:Sale'])]
     private $saleBids;
 
     public function __construct()
