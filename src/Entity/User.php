@@ -57,11 +57,11 @@ class User extends Individual
 
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="Date")
      * @Groups({"person:read", "person:write"})
      */
     #[Groups(['read:Users', 'create:User'])]
-    private $age;
+    private $BirthDate;
 
     /**
      * @ORM\Column(type="boolean",options={"default": "0"})
