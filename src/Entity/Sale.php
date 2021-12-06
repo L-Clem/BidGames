@@ -58,6 +58,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'post' => [
             'denormalization_context' => ['groups' => ['create:Sale']]
         ],
+        'addImage' => [
+            'method' => 'POST',
+            'controller' => PostImageController::class,
+            'path' => '/games/{id}/image',
+            'deserialize' => false,
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+
+        ],
     ],
 )]
 #[ApiFilter(
