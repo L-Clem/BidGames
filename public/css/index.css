@@ -28,6 +28,10 @@ nav {
     margin-right: 10px;
 }
 
+.nav-links a {
+    color: black;
+}
+
 .search-container {
     display: flex;
     flex-direction: row;
