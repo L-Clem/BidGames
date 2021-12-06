@@ -2,6 +2,11 @@ body {
     background-color: white;
 }
 
+#logo {
+    font-family: 'Alfa Slab One';
+    font-size: 36px;
+}
+
 nav {
     display: flex;
     flex-direction: row;
