@@ -11,6 +11,7 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
             <link href="{{ asset('/css/index.css') }}" rel="stylesheet">
+            <link href="{{ asset('/css/fonts.css') }}" rel="stylesheet">
         {% endblock %}
 
         {% block javascripts %}
@@ -21,7 +22,9 @@
         <header>
             {% block header %}
                 <nav>
-                    <div>BIDGAMES</div>
+                    <div>
+                        <span id="logo">BIDGAMES</span>
+                    </div>
                     {% block nav %}
                         <div class="nav-links">
                             <a href="#">Sign in/Register</a>
