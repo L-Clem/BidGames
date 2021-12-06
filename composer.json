@@ -34,7 +34,8 @@
         "symfony/serializer": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
-        "symfony/yaml": "5.4.*"
+        "symfony/yaml": "5.4.*",
+        "vich/uploader-bundle": "^1.18"
     },
     "config": {
         "optimize-autoloader": true,
