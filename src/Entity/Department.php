@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\DepartmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,6 +30,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ],
     ],
 )]
+#[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'code' => 'ASC', 'name' => 'ASC', 'region.name' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'code' => 'exact', 'name' => 'partial', 'region.name' => 'partial'])]
 class Department
 {
     /**
