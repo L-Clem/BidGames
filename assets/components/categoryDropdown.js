@@ -2,8 +2,6 @@ import React, { Component, useEffect, useState } from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
 
-import '../styles/categoryDropdown.css';
-
 export default class Testcomp extends Component {
     constructor(props) {
         super(props);

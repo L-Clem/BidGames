@@ -1,5 +1,3 @@
-import '../styles/auctionList.css';
-
 import React, { Component, useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -67,7 +65,7 @@ export default class AuctionList extends Component {
                                 {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
                                 <Card.Body>
                                     <Card.Link href="#">{item.title}</Card.Link>
-                                    <Card.Text class="price">20 $</Card.Text>
+                                    <Card.Text className="price">20 $</Card.Text>
                                     <Card.Text>Card Title</Card.Text>
                                 </Card.Body>
                             </Card>
