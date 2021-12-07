@@ -1,0 +1,16 @@
+{# ./templates/default/index.html.twig #}
+
+{% extends 'base.twig' %}
+    
+ {% block title %} Symfony React Project {% endblock %}
+    
+ {% block body %}
+    
+     <div id="testid"></div>
+    
+ {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/app.js') }}"></script>
+{% endblock %}

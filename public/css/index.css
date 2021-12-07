@@ -1,0 +1,43 @@
+body {
+    background-color: white;
+}
+
+#logo {
+    font-family: 'Alfa Slab One';
+    font-size: 36px;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.nav-links {
+    margin-right: 5vw;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 70%;
+    justify-content: space-evenly;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.brand {
+    align-self: flex-end;
+    flex: 1 1 30%;
+}
+
