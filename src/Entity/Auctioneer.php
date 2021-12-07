@@ -27,15 +27,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:Auctionner', 'read:Auctionners']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:Auctionner', 'create:Auctionner']]
+            'denormalization_context' => ['groups' => ['update:Auctionner', 'create:Auctionner']],
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            'openapi_context' => [
+                'summary' => 'Update an auctioneer ressource , can only be use by an auctioneer',
+            ]
         ],
-        'delete',
+        'delete' => [
+            'path' => 'admin/auctioneers/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Auctioneer"],
+            ]
+        ],
         'toggleActivation' => [
             'method' => 'POST',
-            'path' => '/auctioneers/{id}/toggleActivation',
+            'path' => 'admin/auctioneers/{id}/toggleActivation',
             'controller' => AuctioneerToggleActivationController::class,
             'openapi_context' => [
                 'summary' => 'allow to activate or desactivate an auctioneer',
+                'tags' => ["Admin/Auctioneer"],
                 'requestBody' => [
                     'content' => [
                         'application/json' => [
@@ -45,38 +55,27 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 ]
             ]
         ],
-        // 'addGame' => [
-        //     'method' => 'POST',
-        //     'path' => '/auctioneers/{id}/addGame',
-        //     'controller' => AuctioneerAddGameController::class,
-        //     'openapi_context' => [
-        //         'summary' => 'allow to add a game to an auctioneer',
-        //         'requestBody' => [
-        //             'content' => [
-        //                 'application/json' => [
-        //                     'schema' => [
-        //                         'type'       => 'object',
-        //                         'properties' =>
-        //                         [
-        //                             'game'        => [
-        //                                 'type' => 'array',
-        //                                 'items' => ['type' => 'string']
-        //                             ],
-        //                         ],
-        //                     ],
-        //                 ]
-        //             ]
-        //         ]
-        //     ]
-        // ]
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Auctionners']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:Auctionner']]
+            'path' => 'admin/auctioneers',
+            'denormalization_context' => ['groups' => ['create:Auctionner']],
+            'openapi_context' => [
+                'summary' => 'allow to activate or desactivate an auctioneer',
+                'tags' => ["Admin/Auctioneer"],
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [],
+                        ]
+                    ]
+                ]
+            ]
         ],
+
     ],
 
 )]
@@ -112,7 +111,7 @@ class Auctioneer extends Individual
      */
     #[Groups(['update:Auctionner'])]
     #[ApiSubresource(
-        maxDepth: 1,
+        maxDepth: 1
     )]
     private $games;
 

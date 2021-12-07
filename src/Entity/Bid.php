@@ -22,16 +22,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:Bid', 'read:Bids']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:Bid', 'create:Bid']]
+            'denormalization_context' => ['groups' => ['update:Bid', 'create:Bid']],
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            'summary' => 'Update a bid ressource , can only be use by an auctioneer',
         ],
-        'delete',
+        'delete' => [
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            'summary' => 'delete a bid ressource , can only be use by an auctioneer',
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Bids']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:Bid']]
+            'denormalization_context' => ['groups' => ['create:Bid']],
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            'summary' => 'Create an auctioneer ressource , can only be use by an auctioneer',
         ],
     ],
 

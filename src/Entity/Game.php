@@ -74,7 +74,7 @@ class Game
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="games")
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['read:Game', 'create:Game', 'read:Sale'])]
+    #[Groups(['read:Game', 'read:Sale'])]
     private $owner;
 
     /**

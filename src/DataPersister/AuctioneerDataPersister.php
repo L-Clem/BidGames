@@ -48,6 +48,8 @@ class AuctioneerDataPersister implements ContextAwareDataPersisterInterface
 
             $data->eraseCredentials();
         }
+        $data->setRoles(["ROLE_AUCTIONEER"]);
+
 
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();

@@ -22,16 +22,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:AuctionHouse', 'read:AuctionHouses']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:AuctionHouse', 'create:AuctionHouse']]
+            'denormalization_context' => ['groups' => ['update:AuctionHouse', 'create:AuctionHouse']],
+            'path' => 'admin/auction_houses/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/AuctionHouse"],
+            ]
         ],
-        'delete',
+        'delete' => [
+            'path' => 'admin/auction_houses/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/AuctionHouse"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:AuctionHouses']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:AuctionHouse']]
+            'denormalization_context' => ['groups' => ['create:AuctionHouse']],
+            'path' => 'admin/auction_houses',
+            'openapi_context' => [
+                'tags' => ["Admin/AuctionHouse"],
+            ]
         ],
     ],
 
