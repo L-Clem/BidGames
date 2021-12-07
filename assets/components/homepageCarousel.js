@@ -1,5 +1,3 @@
-import '../styles/homepageCarousel.css';
-
 import React, { Component, useEffect, useState } from "react";
 import Carousel from 'react-bootstrap/Carousel';
 
