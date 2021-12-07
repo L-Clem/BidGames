@@ -51,6 +51,7 @@ export default class Searchbox extends Component {
             <div id="SearchBar">
                 <form>
                     <input type="text" placeholder="Search listings..." onChange={text => this.handleText(text)}/>
+                    <input type="image"  id="submitSearch" src="../images/search.png" alt="Submit Search" />
                 </form>
             </div>
         )
