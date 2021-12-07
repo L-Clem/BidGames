@@ -26,21 +26,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'denormalization_context' => ['groups' => ['update:User', 'create:User']]
         ],
         'delete',
-        'toggleActivation' => [
-            'method' => 'POST',
-            'path' => '/auctioneers/{id}/toggleActivation',
-            'controller' => UserToggleActivationController::class,
-            'openapi_context' => [
-                'summary' => 'allow to activate or desactivate an User',
-                'requestBody' => [
-                    'content' => [
-                        'application/json' => [
-                            'schema' => [],
-                        ]
-                    ]
-                ]
-            ]
-        ],
+        // 'toggleActivation' => [
+        //     'method' => 'POST',
+        //     'path' => '/auctioneers/{id}/toggleActivation',
+        //     'controller' => UserToggleActivationController::class,
+        //     'openapi_context' => [
+        //         'summary' => 'allow to activate or desactivate an User',
+        //         'requestBody' => [
+        //             'content' => [
+        //                 'application/json' => [
+        //                     'schema' => [],
+        //                 ]
+        //             ]
+        //         ]
+        //     ]
+        // ],
     ],
     collectionOperations: [
         'get' => [
@@ -91,18 +91,6 @@ class User extends Individual
     }
 
 
-
-    public function getAge(): ?int
-    {
-        return $this->age;
-    }
-
-    public function setAge(int $age): self
-    {
-        $this->age = $age;
-
-        return $this;
-    }
 
     public function getVerified(): ?bool
     {
@@ -172,6 +160,26 @@ class User extends Individual
                 $purchaseOrder->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of BirthDate
+     */
+    public function getBirthDate()
+    {
+        return $this->BirthDate;
+    }
+
+    /**
+     * Set the value of BirthDate
+     *
+     * @return  self
+     */
+    public function setBirthDate($BirthDate)
+    {
+        $this->BirthDate = $BirthDate;
 
         return $this;
     }

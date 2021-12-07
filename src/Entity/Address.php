@@ -48,6 +48,7 @@ class Address
      * @ORM\ManyToOne(targetEntity=City::class, inversedBy="addresses")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
     private $city;
 
 

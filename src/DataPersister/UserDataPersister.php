@@ -44,7 +44,7 @@ class UserDataPersister implements ContextAwareDataPersisterInterface
 
             $data->eraseCredentials();
         }
-
+        $data->setRoles(["ROLE_USER"]);
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
     }

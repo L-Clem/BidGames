@@ -20,10 +20,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'normalization_context' => ['groups' => ['read:Department', 'read:Departments']]
         ],
+        'patch' => [
+            'path' => 'admin/departments/{id}',
+            'normalization_context' => ['groups' => ['create:Department']],
+            'openapi_context' => [
+                'tags' => ["Admin/Department"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/departments/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Department"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Departments']]
+        ],
+        'post' => [
+            'path' => 'admin/departments',
+            'normalization_context' => ['groups' => ['create:Department']],
+            'openapi_context' => [
+                'tags' => ["Admin/Department"],
+            ]
         ],
     ],
 )]
@@ -34,19 +54,19 @@ class Department
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Departments"])]
+    #[Groups(["read:Departments", 'read:City'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["read:Departments"])]
+    #[Groups(["read:Departments", 'read:City'])]
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["read:Departments"])]
+    #[Groups(["read:Departments", 'read:City'])]
     private $name;
 
     /**

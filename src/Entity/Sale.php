@@ -56,7 +56,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:Sales']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:Sale']]
+            'denormalization_context' => ['groups' => ['create:Sale']],
+            "security" => "is_granted('ROLE_AUCTIONEER')",
         ],
         'addImage' => [
             'method' => 'POST',
