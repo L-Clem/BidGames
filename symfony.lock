@@ -319,10 +319,10 @@
             "config/packages/messenger.yaml"
         ]
     },
-    "symfony/options-resolver": {
+    "symfony/mime": {
         "version": "v5.4.0"
     },
-    "symfony/mime": {
+    "symfony/options-resolver": {
         "version": "v5.4.0"
     },
     "symfony/password-hasher": {
@@ -330,6 +330,9 @@
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.23.1"
+    },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.23.0"
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.23.0"
