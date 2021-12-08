@@ -1,11 +1,10 @@
 # TPRE315_BidGames
-## bidGames
 
 ---
 
 A web application dedicated to reselling board games through auctions and bidding, done for a school project at EPSI Bordeaux.
 
-### Requirements:
+## Requirements:
 
 - ❗️PHP == 8.0.13❗️
 - Composer
@@ -14,7 +13,7 @@ A web application dedicated to reselling board games through auctions and biddin
 - NPM
 - Yarn
 
-### Installation steps:
+## Installation steps:
 
 1. Decompress the .zip file of the project wherever you want.
     1. Move to the project directory.
