@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'method' => 'POST',
             'controller' => PostImageController::class,
             
-            'path' => '/games/{id}/image',
+            'path' => '/sales/{id}/image',
             'deserialize' => false,
             'openapi_context' => [
                 'requestBody' => [
