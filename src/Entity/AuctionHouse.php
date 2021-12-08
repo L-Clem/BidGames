@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\AuctionHouseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,20 +25,35 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:AuctionHouse', 'read:AuctionHouses']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:AuctionHouse', 'create:AuctionHouse']]
+            'denormalization_context' => ['groups' => ['update:AuctionHouse', 'create:AuctionHouse']],
+            'path' => 'admin/auction_houses/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/AuctionHouse"],
+            ]
         ],
-        'delete',
+        'delete' => [
+            'path' => 'admin/auction_houses/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/AuctionHouse"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:AuctionHouses']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:AuctionHouse']]
+            'denormalization_context' => ['groups' => ['create:AuctionHouse']],
+            'path' => 'admin/auction_houses',
+            'openapi_context' => [
+                'tags' => ["Admin/AuctionHouse"],
+            ]
         ],
     ],
 
 )]
+#[ApiFilter(OrderFilter::class, properties: ['name' => 'ASC', 'auctioneers.lastname' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'auctioneers.user.lastname' => 'partial'])]
 class AuctionHouse
 {
     /**

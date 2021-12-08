@@ -12,7 +12,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=SaleBidRepository::class)
  */
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'patch' => [
+            'denormalization_context' => ['groups' => ['update:SaleBid', 'create:SaleBid']]
+        ],
+        'delete',
+    ],
+    collectionOperations: [
 
+        'post' => [
+            'denormalization_context' => ['groups' => ['create:SaleBid']]
+        ],
+    ],
+
+)]
 class SaleBid
 {
     /**
@@ -56,6 +73,7 @@ class SaleBid
      * @ORM\ManyToOne(targetEntity=Sale::class, inversedBy="saleBids")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Bid'])]
     private $sale;
 
     /**

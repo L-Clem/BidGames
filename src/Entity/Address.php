@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=AddressRepository::class)
  */
-
 class Address
 {
     /**
@@ -23,19 +21,19 @@ class Address
     /**
      * @ORM\Column(type="smallint")
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids', 'create:Bid'])]
     private $streetNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids', 'create:Bid'])]
     private $streetName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
+    #[Groups(['read:Auctionner', 'create:Bid', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids'])]
     private $addressComplement;
 
     /**
@@ -48,6 +46,7 @@ class Address
      * @ORM\ManyToOne(targetEntity=City::class, inversedBy="addresses")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:Auctionner', 'read:AuctionHouses', "create:AuctionHouse", 'create:Auctionner', 'create:DepositAdress', 'read:User', 'create:User', 'read:Bids', 'create:Bid'])]
     private $city;
 
 

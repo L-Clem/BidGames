@@ -30,6 +30,8 @@ class AuctioneerDataProvider implements ContextAwareCollectionDataProviderInterf
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = [])
     {
+
+
         $manager = $this->managerRegistry->getManagerForClass($resourceClass);
         $repository = $manager->getRepository($resourceClass);
         $queryBuilder = $repository->createQueryBuilder('a')

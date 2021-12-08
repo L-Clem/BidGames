@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\DepartmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,13 +23,35 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'normalization_context' => ['groups' => ['read:Department', 'read:Departments']]
         ],
+        'patch' => [
+            'path' => 'admin/departments/{id}',
+            'normalization_context' => ['groups' => ['create:Department']],
+            'openapi_context' => [
+                'tags' => ["Admin/Department"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/departments/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Department"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Departments']]
         ],
+        'post' => [
+            'path' => 'admin/departments',
+            'normalization_context' => ['groups' => ['create:Department']],
+            'openapi_context' => [
+                'tags' => ["Admin/Department"],
+            ]
+        ],
     ],
 )]
+#[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'code' => 'ASC', 'name' => 'ASC', 'region.name' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'code' => 'exact', 'name' => 'partial', 'region.name' => 'partial'])]
 class Department
 {
     /**
@@ -34,19 +59,19 @@ class Department
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Departments"])]
+    #[Groups(["read:Departments", 'read:City'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["read:Departments"])]
+    #[Groups(["read:Departments", 'read:City'])]
     private $code;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["read:Departments"])]
+    #[Groups(["read:Departments", 'read:City'])]
     private $name;
 
     /**

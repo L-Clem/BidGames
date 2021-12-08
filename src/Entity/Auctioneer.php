@@ -5,9 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Controller\AuctioneerAddGameController;
+use App\Controller\AuctioneerEstimateGameController;
 use App\Controller\AuctioneerToggleActivationController;
+use App\Controller\IndividualToggleActivationController;
 use App\Repository\AuctioneerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,60 +30,89 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:Auctionner', 'read:Auctionners']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:Auctionner', 'create:Auctionner']]
-        ],
-        'delete',
-        'toggleActivation' => [
-            'method' => 'POST',
-            'path' => '/auctioneers/{id}/toggleActivation',
-            'controller' => AuctioneerToggleActivationController::class,
+            'denormalization_context' => ['groups' => ['update:Auctionner', 'create:Auctionner']],
+            "security" => "is_granted('ROLE_AUCTIONEER')",
             'openapi_context' => [
-                'summary' => 'allow to activate or desactivate an auctioneer',
+                'summary' => 'Update an auctioneer ressource , can only be use by an auctioneer',
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/auctioneers/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Auctioneer"],
+            ]
+        ],
+        'addGame' => [
+            'method' => 'POST',
+            'path' => '/auctioneers/addgames',
+            'controller' => AuctioneerAddGameController::class,
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            "read" => false,
+            'openapi_context' => [
+                'summary' => 'allow to add  a game for an auctioneer (use the current auctioneer)',
                 'requestBody' => [
                     'content' => [
                         'application/json' => [
-                            'schema' => [],
+                            'schema' => [
+                                'type' => "object",
+                                "properties" => [
+                                    "Games" => [
+                                        "type" => "array",
+                                        "items" => [
+                                            "type" => "string"
+                                        ]
+
+                                    ]
+                                ]
+                            ],
                         ]
                     ]
                 ]
             ]
         ],
-        // 'addGame' => [
-        //     'method' => 'POST',
-        //     'path' => '/auctioneers/{id}/addGame',
-        //     'controller' => AuctioneerAddGameController::class,
-        //     'openapi_context' => [
-        //         'summary' => 'allow to add a game to an auctioneer',
-        //         'requestBody' => [
-        //             'content' => [
-        //                 'application/json' => [
-        //                     'schema' => [
-        //                         'type'       => 'object',
-        //                         'properties' =>
-        //                         [
-        //                             'game'        => [
-        //                                 'type' => 'array',
-        //                                 'items' => ['type' => 'string']
-        //                             ],
-        //                         ],
-        //                     ],
-        //                 ]
-        //             ]
-        //         ]
-        //     ]
-        // ]
+        'estimateGame' => [
+            'method' => 'POST',
+            'path' => '/auctioneers/estimate/{id}',
+            'controller' => AuctioneerEstimateGameController::class,
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            "read" => false,
+            'openapi_context' => [
+                'summary' => 'allow to estimate a game , only work if the auctioneer own the game(use the current auctioneer)',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => "object",
+                                "properties" => [
+                                    "estimation" => [
+                                        "type" => "number",
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Auctionners']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:Auctionner']]
+            'path' => 'admin/auctioneers',
+            'denormalization_context' => ['groups' => ['create:Auctionner']],
+            'openapi_context' => [
+                'tags' => ["Admin/Auctioneer"],
+
+            ]
         ],
+
     ],
 
 )]
 #[ApiFilter(OrderFilter::class, properties: ['firstname' => 'ASC', 'lastname' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'voluntary' => 'exact', 'auctionHouse.name' => 'partial'])]
 class Auctioneer extends Individual
 {
 
@@ -112,7 +144,7 @@ class Auctioneer extends Individual
      */
     #[Groups(['update:Auctionner'])]
     #[ApiSubresource(
-        maxDepth: 1,
+        maxDepth: 1
     )]
     private $games;
 

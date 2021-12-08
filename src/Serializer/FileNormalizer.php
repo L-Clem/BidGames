@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\Serializer;
+namespace App\Serializer;
 
 use App\Entity\File;
 use App\Entity\Game;

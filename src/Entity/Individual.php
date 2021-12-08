@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\IndividualToggleActivationController;
 use App\Controller\MeController;
 use App\Repository\IndividualRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,7 +34,7 @@ use Symfony\Component\Validator\Constraints\Length;
             'method' => 'get',
             'controller' => MeController::class,
             'read' => false,
-            'security' => 'is_granted("ROLE_USER")',
+
             'openapi_context' => [
                 'security' => [['bearerAuth' => []]]
             ]
@@ -45,7 +46,23 @@ use Symfony\Component\Validator\Constraints\Length;
             'openapi_context' => ['summary' => 'hidden'],
             'read' => false,
             'output' => false
-        ]
+        ],
+        'toggleActivation' => [
+            'method' => 'POST',
+            'path' => 'admin/individuals/{id}/toggleActivation',
+            'controller' => IndividualToggleActivationController::class,
+            'openapi_context' => [
+                'summary' => 'allow to activate or desactivate an auctioneer',
+                'tags' => ["Admin/Individual"],
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [],
+                        ]
+                    ]
+                ]
+            ]
+        ],
     ],
     normalizationContext: ['groups' => ['read:Individual']]
 
@@ -196,9 +213,9 @@ class Individual implements UserInterface, PasswordAuthenticatedUserInterface, J
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+
+        return $roles;
     }
 
     public function setRoles(?array $roles): self
@@ -273,6 +290,7 @@ class Individual implements UserInterface, PasswordAuthenticatedUserInterface, J
         $individual = new Individual();
         $individual->setId($id);
         $individual->setEmail($payload['email'] ?? '');
+        $individual->setRoles($payload['roles'] ??  []);
 
         return $individual;
     }
