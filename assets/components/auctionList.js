@@ -42,6 +42,13 @@ export default class AuctionList extends Component {
 
     render() {
         const { error, isLoaded, items } = this.state;
+        let cardClass = 'green-card';
+        let cardTitle = 'Check out what we have in stock';
+
+        if (this.props.isRed) {
+            cardClass = 'red-card';
+            cardTitle = 'Check out current live auctions';
+        }
         console.log(items);
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -49,32 +56,30 @@ export default class AuctionList extends Component {
             return <div>Loading...</div>;
         } else {
             return (
-                <ul>
-                    <li>
-                        <Card className="custom-card color">
-                            <Card.Body className="card">
-                                <Card.Title>Check out what we have in stock</Card.Title>
-                                <Button href ="#" variant="primary">Shop now</Button>
+                <div className="auction-list">
+                    <div className="list-element">
+                        <Card text='light'>
+                            <Card.Body className={`card colored-card ${cardClass}`}>
+                                <Card.Title>{ cardTitle }</Card.Title>
+                                <Button className="card-button" href="#" variant="primary">Shop now →</Button>
                             </Card.Body>
                         </Card>
-                    </li>
+                    </div>
                     
-                    {items.slice(1, 4).map(item => (
-                        <li key={item.id}>
-                            <Card className="custom-card">
-                                {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                    {items.slice(1, 5).map(item => (
+                        <div className="list-element" key={item.id}>
+                            <Card border="light" className="custom-card">
+                                <Card.Img variant="top" src={require('../images/splash.png')}  />
                                 <Card.Body>
-                                    <Card.Link href="#">{item.title}</Card.Link>
+                                    <Card.Link href={`/item/${item.id}`}>{item.title}</Card.Link>
                                     <Card.Text className="price">20 $</Card.Text>
-                                    <Card.Text>Card Title</Card.Text>
+                                    <Card.Text>Bids: 8</Card.Text>
                                 </Card.Body>
                             </Card>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             );
         }
-
     }
 }
-
