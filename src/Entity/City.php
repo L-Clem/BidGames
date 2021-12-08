@@ -10,10 +10,50 @@ use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CityRepository::class)
  */
+
+#[ApiResource(
+    paginationItemsPerPage: 10,
+    paginationMaximumItemsPerPage: 50,
+    paginationClientItemsPerPage: true,
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:City', 'read:Cities']]
+        ],
+        'patch' => [
+            'path' => 'admin/cities/{id}',
+            'normalization_context' => ['groups' => ['create:City']],
+            'openapi_context' => [
+                'tags' => ["Admin/City"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/cities/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/City"],
+            ]
+        ],
+    ],
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Cities']]
+        ],
+        'post' => [
+            'path' => 'admin/cities',
+            'normalization_context' => ['groups' => ['create:City']],
+            'openapi_context' => [
+                'tags' => ["Admin/City"],
+            ]
+        ],
+
+    ],
+
+)]
+
 #[ApiResource]
 #[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'name' => 'ASC', 'postalCode' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'postalCode' => 'exact'])]
@@ -24,22 +64,26 @@ class City
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:Cities'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Cities', 'create:City'])]
     private $name;
 
     /**
      * @ORM\Column(type="string", length=5)
      */
+    #[Groups(['read:Cities', 'create:City'])]
     private $postalCode;
 
     /**
      * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="cities")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['read:City', 'create:City'])]
     private $Department;
 
 

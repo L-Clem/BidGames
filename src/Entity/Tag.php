@@ -24,10 +24,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'normalization_context' => ['groups' => ['read:Tag', 'read:Tags']]
         ],
+        'patch' => [
+            'path' => 'admin/tags/{id}',
+            'normalization_context' => ['groups' => ['create:Tag']],
+            'openapi_context' => [
+                'tags' => ["Admin/Tag"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/tags/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Tag"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Tags']]
+        ],
+        'post' => [
+            'path' => 'admin/tags',
+            'normalization_context' => ['groups' => ['create:Tag']],
+            'openapi_context' => [
+                'tags' => ["Admin/Tag"],
+            ]
         ],
 
     ],
@@ -47,7 +67,7 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Tags'])]
+    #[Groups(['read:Sale', 'read:Tags', 'read:Bid'])]
     private $name;
 
     /**

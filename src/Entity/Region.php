@@ -24,10 +24,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'normalization_context' => ['groups' => ['read:Region', 'read:Regions']]
         ],
+        'patch' => [
+            'path' => 'admin/regions/{id}',
+            'normalization_context' => ['groups' => ['create:Region']],
+            'openapi_context' => [
+                'tags' => ["Admin/Region"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/regions/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Region"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Regions']]
+        ],
+        'post' => [
+            'path' => 'admin/regions',
+            'normalization_context' => ['groups' => ['create:Region']],
+            'openapi_context' => [
+                'tags' => ["Admin/Region"],
+            ]
         ],
     ],
 
