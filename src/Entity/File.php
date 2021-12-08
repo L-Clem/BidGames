@@ -19,6 +19,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         'delete' => [
             "security" => "is_granted('ROLE_USER')",
         ],
+        'get' => [
+            'controller' => NotFoundAction::class,
+            'openapi_context' => [
+                'summary' => 'hidden',
+            ],
+            'read' => false,
+            'output' => false,
+        ]
     ],
     collectionOperations: [],
 
