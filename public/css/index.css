@@ -1,6 +1,5 @@
 body {
     background-color: white;
-    width: 100vw;
     font-family: 'Lato';
 }
 
@@ -32,20 +31,6 @@ nav {
 
 .nav-links a {
     color: black;
-}
-
-.search-container {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    border-bottom: 1px solid #868D8F;
-}
-
-.search-bar {
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
 }
 
 /* footer */

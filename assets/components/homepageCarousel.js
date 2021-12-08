@@ -10,21 +10,21 @@ export default class HomepageCarousel extends Component {
                 <Carousel.Item>
                     <img
                     className="d-block w-100"
-                    src={require('../images/1.jpg')} 
+                    src={require('../images/splash.png')} 
                     alt="First slide"
                     />
                 </Carousel.Item>
                 <Carousel.Item>
                     <img
                     className="d-block w-100"
-                    src={require('../images/1.jpg')} 
+                    src={require('../images/splash.png')} 
                     alt="Second slide"
                     />
                 </Carousel.Item>
                 <Carousel.Item>
                     <img
                     className="d-block w-100"
-                    src={require('../images/1.jpg')} 
+                    src={require('../images/splash.png')} 
                     alt="Third slide"
                     />
                 </Carousel.Item>
