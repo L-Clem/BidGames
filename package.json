@@ -30,6 +30,7 @@
         "connected-react-router": "^6.9.2",
         "font-awesome": "^4.7.0",
         "lodash": "^4.17.21",
+        "react-bootstrap": "^2.0.3",
         "react-redux": "^7.2.6",
         "react-router-dom": "^6.0.2",
         "redux": "^4.1.2",

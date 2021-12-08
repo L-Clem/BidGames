@@ -1,4 +1,6 @@
 import React, { Component, useEffect, useState } from "react";
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown'
 
 export default class Testcomp extends Component {
     constructor(props) {
@@ -12,7 +14,7 @@ export default class Testcomp extends Component {
 
     componentDidMount() {
 
-        fetch('http://localhost:8000/api/departments', {
+        fetch('http://localhost:8000/api/categories', {
             method: 'GET',
             headers: {'accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -48,13 +50,11 @@ export default class Testcomp extends Component {
           return <div>Loading...</div>;
         } else {
           return (
-              <ul>
-              {items.map(item => (
-                <li key={item.id}>
-                  {item.name}
-                </li>
-              ))}
-            </ul>
+            <DropdownButton id="dropdown-basic-button" title="Shop by category">
+                {items.map(item => (
+                    <Dropdown.Item key={item.id} href="#">{item.name}</Dropdown.Item>
+                ))}
+            </DropdownButton>
           );
         }
       }
