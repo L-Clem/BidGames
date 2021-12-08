@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ],
         'post' => [
             'denormalization_context' => ['groups' => ['create:Bid']],
-            "security" => "is_granted('ROLE_AUCTIONEER')",
+            "security" => "is_granted('ROLE_AUCTIONEER') or is_granted('ROLE_USER')",
             'summary' => 'Create an auctioneer ressource , can only be use by an auctioneer',
         ],
     ],
@@ -69,12 +69,13 @@ class Bid
      * @ORM\ManyToOne(targetEntity=Auctioneer::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=true)
      */
-    #[Groups(['read:Bid', 'create:Bid'])]
+    #[Groups(['read:Bid'])]
     private $auctioneer;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      */
+    #[Groups(['read:Bid', 'create:Bid'])]
     private $address;
 
     /**

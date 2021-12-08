@@ -26,7 +26,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:Sale', 'read:Sales']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:Sale', 'create:Sale']]
+            'denormalization_context' => ['groups' => ['update:Sale', 'create:Sale']],
+            "security" => "is_granted('ROLE_AUCTIONEER') or is_granted('ROLE_USER')",
         ],
         'delete',
         'countFavorites' => [
@@ -57,11 +58,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ],
         'post' => [
             'denormalization_context' => ['groups' => ['create:Sale']],
-            "security" => "is_granted('ROLE_AUCTIONEER')",
+            "security" => "is_granted('ROLE_AUCTIONEER') or is_granted('ROLE_USER')",
         ],
         'addImage' => [
             'method' => 'POST',
             'controller' => PostImageController::class,
+
             'path' => '/games/{id}/image',
             'deserialize' => false,
             'openapi_context' => [
@@ -102,19 +104,19 @@ class Sale
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Sales'])]
+    #[Groups(['read:Sales', 'read:Bid'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sales', 'create:Sale'])]
+    #[Groups(['read:Sales', 'create:Sale', 'read:Bid'])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'create:Sale'])]
+    #[Groups(['read:Sale', 'create:Sale', 'read:Bid'])]
     private $description;
 
     /**
@@ -132,7 +134,7 @@ class Sale
     /**
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Sale', 'create:Sale'])]
+    #[Groups(['read:Sale'])]
     private $tax;
 
     /**
@@ -150,13 +152,13 @@ class Sale
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Bid'])]
     private $picture;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="sales")
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:Bid'])]
     private $tags;
 
     /**
