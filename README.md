@@ -8,9 +8,6 @@ A web application dedicated to reselling board games through auctions and biddin
 
 - ❗️PHP == 8.0.13❗️
 - Composer
-- Symfony
-- NodeJS
-- NPM
 - Yarn
 
 ## Installation steps:
