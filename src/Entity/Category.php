@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,20 +22,39 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true,
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:Category', 'read:Categorys']]
+            'normalization_context' => ['groups' => ['read:Category', 'read:Categories']]
+        ],
+        'patch' => [
+            'path' => 'admin/categories/{id}',
+            'normalization_context' => ['groups' => ['create:Category']],
+            'openapi_context' => [
+                'tags' => ["Admin/Category"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/categories/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Category"],
+            ]
         ],
     ],
     collectionOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:Categorys']]
+            'normalization_context' => ['groups' => ['read:Categories']]
         ],
         'post' => [
-            'normalization_context' => ['groups' => ['create:Category']]
+            'path' => 'admin/categories',
+            'normalization_context' => ['groups' => ['create:Category']],
+            'openapi_context' => [
+                'tags' => ["Admin/Category"],
+            ]
         ],
 
     ],
 
 )]
+#[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'name' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial'])]
 class Category
 {
     /**
@@ -40,13 +62,13 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Categorys'])]
+    #[Groups(['read:Category'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Games', 'read:Categorys', 'read:Sale', 'create:Category'])]
+    #[Groups(['read:Sale', 'read:Games', 'read:Categories', 'read:Sale', 'create:Categories'])]
     private $name;
 
     /**

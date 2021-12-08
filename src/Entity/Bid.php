@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\BidRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,20 +26,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['read:Bid', 'read:Bids']]
         ],
         'patch' => [
-            'denormalization_context' => ['groups' => ['update:Bid', 'create:Bid']]
+            'denormalization_context' => ['groups' => ['update:Bid', 'create:Bid']],
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            'summary' => 'Update a bid ressource , can only be use by an auctioneer',
         ],
-        'delete',
+        'delete' => [
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            'summary' => 'delete a bid ressource , can only be use by an auctioneer',
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Bids']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:Bid']]
+            'denormalization_context' => ['groups' => ['create:Bid']],
+            "security" => "is_granted('ROLE_AUCTIONEER') or is_granted('ROLE_USER')",
+            'summary' => 'Create an auctioneer ressource , can only be use by an auctioneer',
         ],
     ],
 
 )]
+#[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(DateFilter::class, properties: ['startHour', 'endHour'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
 class Bid
 {
     /**
@@ -62,12 +76,13 @@ class Bid
      * @ORM\ManyToOne(targetEntity=Auctioneer::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=true)
      */
-    #[Groups(['read:Bid', 'create:Bid'])]
+    #[Groups(['read:Bid'])]
     private $auctioneer;
 
     /**
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      */
+    #[Groups(['read:Bid', 'create:Bid'])]
     private $address;
 
     /**

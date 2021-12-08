@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 
-class AuctioneerAddGameController
+class AuctioneerEstimateGameController
 {
     public function __construct(private Security $security, private EntityManagerInterface $em)
     {
@@ -17,15 +17,18 @@ class AuctioneerAddGameController
 
     public function __invoke(Request $request)
     {
+
+
+        $game =  $this->em->getRepository(Game::class)->find($request->get('id'));
+
         $idAuctioneer = $this->security->getUser()->getId();
         $auctioneer = $this->em->getRepository(Auctioneer::class)->find($idAuctioneer);
 
-        $GameArray = json_decode($request->getContent(), true)["Game"];
-        foreach ($GameArray as $id) {
-            $game =  $this->em->getRepository(Game::class)->find($id);
-            $game->setAuctioneer($auctioneer);
-        }
 
-        return $auctioneer;
+        $estimation = json_decode($request->getContent(), true)["estimation"];
+        $game->setEstimation($estimation);
+
+
+        return $game;
     }
 }

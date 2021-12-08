@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\PostImageController;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -60,6 +64,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
 
 )]
+#[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'estimation' => 'ASC', 'forSale' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'estimation' => 'exact'])]
+#[ApiFilter(RangeFilter::class, properties: ['estimation'])]
 class Game
 {
     /**
@@ -74,7 +81,7 @@ class Game
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="games")
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['read:Game', 'create:Game', 'read:Sale'])]
+    #[Groups(['read:Game', 'read:Sale'])]
     private $owner;
 
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,16 +24,37 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'normalization_context' => ['groups' => ['read:Tag', 'read:Tags']]
         ],
+        'patch' => [
+            'path' => 'admin/tags/{id}',
+            'normalization_context' => ['groups' => ['create:Tag']],
+            'openapi_context' => [
+                'tags' => ["Admin/Tag"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/tags/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Tag"],
+            ]
+        ],
     ],
     collectionOperations: [
         'get' => [
             'normalization_context' => ['groups' => ['read:Tags']]
         ],
+        'post' => [
+            'path' => 'admin/tags',
+            'normalization_context' => ['groups' => ['create:Tag']],
+            'openapi_context' => [
+                'tags' => ["Admin/Tag"],
+            ]
+        ],
 
     ],
 
 )]
-
+#[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'name' => 'ASC', 'sales.lotNumber' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'sales.lotNumber' => 'partial'])]
 class Tag
 {
     /**
@@ -43,7 +67,7 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Tags'])]
+    #[Groups(['read:Sale', 'read:Tags', 'read:Bid'])]
     private $name;
 
     /**

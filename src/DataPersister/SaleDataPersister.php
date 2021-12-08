@@ -39,6 +39,8 @@ class SaleDataPersister implements ContextAwareDataPersisterInterface
     {
         if ($this->_request->getMethod() == 'POST') {
             $data->setPublishedAt(new \DateTime());
+            $data->setTax(4);
+            $data->setLotNumber(uniqid());
         }
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
