@@ -53,8 +53,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
 
 )]
-
-#[ApiResource]
 #[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'name' => 'ASC', 'postalCode' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'postalCode' => 'exact'])]
 class City
