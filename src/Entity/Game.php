@@ -41,7 +41,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'addImage' => [
             'method' => 'POST',
             'controller' => PostImageController::class,
-            
             'path' => '/sales/{id}/image',
             'deserialize' => false,
             'openapi_context' => [
