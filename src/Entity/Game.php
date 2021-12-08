@@ -62,7 +62,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ],
         ],
     ],
-
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'estimation' => 'ASC', 'forSale' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'estimation' => 'exact'])]
