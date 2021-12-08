@@ -50,7 +50,7 @@ export default class Testcomp extends Component {
           return <div>Loading...</div>;
         } else {
           return (
-            <DropdownButton id="dropdown-basic-button" title="Shop by category">
+            <DropdownButton className="transparent" variant="light" id="dropdown-basic-button" title="Shop by category">
                 {items.map(item => (
                     <Dropdown.Item key={item.id} href="#">{item.name}</Dropdown.Item>
                 ))}

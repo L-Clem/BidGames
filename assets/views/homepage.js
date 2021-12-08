@@ -13,12 +13,12 @@ export default class Homepage extends Component {
                 <HomepageCarousel />
                 <div>
                     <div className="auction-section">
-                        <h2> Recommended auctions</h2>
-                        <AuctionList />
+                        <h2>Recommended auctions</h2>
+                        <AuctionList isRed={false}/>
                     </div>
                     <div className="auction-section">   
                         <h2>Live auctions</h2>
-                        <AuctionList />
+                        <AuctionList isRed={true}/>
                     </div>
                 </div>
             </div>
