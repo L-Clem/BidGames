@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Controller\AuctioneerAddGameController;
 use App\Controller\AuctioneerEstimateGameController;
@@ -111,6 +112,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 )]
 #[ApiFilter(OrderFilter::class, properties: ['firstname' => 'ASC', 'lastname' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'voluntary' => 'exact', 'auctionHouse.name' => 'partial'])]
 class Auctioneer extends Individual
 {
 
