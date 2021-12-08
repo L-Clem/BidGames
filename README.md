@@ -14,7 +14,7 @@ A web application dedicated to reselling board games through auctions and biddin
 
 1. Decompress the .zip file of the project wherever you want.
     1. Move to the project directory.
-2. Enter in order these commands in the project directory :
+2. Enter in order these commands (with cmd or sh like cli) in the project directory :
     1. `composer u --ignore-platform-reqs && composer i && yarn && yarn build` 
     2. Then open two terminal with each commands and keep them running : 
         1. `php -S localhost:8080 -t public`
