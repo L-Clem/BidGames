@@ -26,6 +26,8 @@ A web application dedicated to reselling board games through auctions and biddin
         2. `yarn run encore dev --watch`
 4. Now you can go on your browser and type :
     1. [http://localhost:8080/api](http://localhost:8080/api) 
+    <br>
     To get to the API documentation.
     2. [http://localhost:8080/app](http://localhost:8080/api)
+    <br>
     To get to the application website.
