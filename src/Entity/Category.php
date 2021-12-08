@@ -22,15 +22,32 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true,
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:Category', 'read:Categorys']]
+            'normalization_context' => ['groups' => ['read:Category', 'read:Categories']]
+        ],
+        'patch' => [
+            'path' => 'admin/categories/{id}',
+            'normalization_context' => ['groups' => ['create:Category']],
+            'openapi_context' => [
+                'tags' => ["Admin/Category"],
+            ]
+        ],
+        'delete' => [
+            'path' => 'admin/categories/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/Category"],
+            ]
         ],
     ],
     collectionOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:Categorys']]
+            'normalization_context' => ['groups' => ['read:Categories']]
         ],
         'post' => [
-            'normalization_context' => ['groups' => ['create:Category']]
+            'path' => 'admin/categories',
+            'normalization_context' => ['groups' => ['create:Category']],
+            'openapi_context' => [
+                'tags' => ["Admin/Category"],
+            ]
         ],
 
     ],
@@ -45,13 +62,13 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Categorys'])]
+    #[Groups(['read:Category'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Games', 'read:Categorys', 'read:Sale', 'create:Category'])]
+    #[Groups(['read:Sale', 'read:Games', 'read:Categories', 'read:Sale', 'create:Categories'])]
     private $name;
 
     /**
