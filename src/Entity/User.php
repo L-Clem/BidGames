@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Controller\UserChooseDepositAddress;
+use App\Controller\UserChooseDepositAdress;
+use App\Controller\UserMakePurchaseOrder;
+use App\Controller\Userverify;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,21 +30,66 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'denormalization_context' => ['groups' => ['update:User', 'create:User']]
         ],
         'delete',
-        // 'toggleActivation' => [
-        //     'method' => 'POST',
-        //     'path' => '/auctioneers/{id}/toggleActivation',
-        //     'controller' => UserToggleActivationController::class,
-        //     'openapi_context' => [
-        //         'summary' => 'allow to activate or desactivate an User',
-        //         'requestBody' => [
-        //             'content' => [
-        //                 'application/json' => [
-        //                     'schema' => [],
-        //                 ]
-        //             ]
-        //         ]
-        //     ]
-        // ],
+        'chooseDepositAdress' => [
+            'method' => 'POST',
+            'path' => '/users/chooseDepositAdress/{gameId}',
+            'controller' => UserChooseDepositAddress::class,
+            "security" => "is_granted('ROLE_USER')",
+            "read" => false,
+            'openapi_context' => [
+                'summary' => 'allow to  choose a deposit Adress When you buy a game (Check if the game is sold and if you are the owner)',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => "object",
+                                "properties" => [
+                                    "DepositAdress" => [
+                                        "type" => "string",
+
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'makePurchaseOrder' => [
+            'method' => 'POST',
+            'path' => '/users/makePurchaseOrder/{SalesBidId}',
+            'controller' => UserMakePurchaseOrder::class,
+            "security" => "is_granted('ROLE_USER')",
+            "read" => false,
+            'openapi_context' => [
+                'summary' => 'allow  a user to make a purchaseorder on a salesBid',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => "object",
+                                "properties" => [
+                                    "amount" => [
+                                        "type" => "number",
+
+                                    ]
+
+                                ]
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'verifyUser' => [
+            'method' => 'POST',
+            'controller' => Userverify::class,
+            'path' => 'admin/users/verify/{id}',
+            'openapi_context' => [
+                'tags' => ["Admin/User"],
+            ]
+        ],
+
     ],
     collectionOperations: [
         'get' => [

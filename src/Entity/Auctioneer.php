@@ -7,7 +7,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Controller\AuctioneerAddGameController;
+use App\Controller\AuctioneerEstimateGameController;
 use App\Controller\AuctioneerToggleActivationController;
+use App\Controller\IndividualToggleActivationController;
 use App\Repository\AuctioneerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -39,17 +41,53 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'tags' => ["Admin/Auctioneer"],
             ]
         ],
-        'toggleActivation' => [
+        'addGame' => [
             'method' => 'POST',
-            'path' => 'admin/auctioneers/{id}/toggleActivation',
-            'controller' => AuctioneerToggleActivationController::class,
+            'path' => '/auctioneers/addgames',
+            'controller' => AuctioneerAddGameController::class,
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            "read" => false,
             'openapi_context' => [
-                'summary' => 'allow to activate or desactivate an auctioneer',
-                'tags' => ["Admin/Auctioneer"],
+                'summary' => 'allow to add  a game for an auctioneer (use the current auctioneer)',
                 'requestBody' => [
                     'content' => [
                         'application/json' => [
-                            'schema' => [],
+                            'schema' => [
+                                'type' => "object",
+                                "properties" => [
+                                    "Games" => [
+                                        "type" => "array",
+                                        "items" => [
+                                            "type" => "string"
+                                        ]
+
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'estimateGame' => [
+            'method' => 'POST',
+            'path' => '/auctioneers/estimate/{id}',
+            'controller' => AuctioneerEstimateGameController::class,
+            "security" => "is_granted('ROLE_AUCTIONEER')",
+            "read" => false,
+            'openapi_context' => [
+                'summary' => 'allow to estimate a game , only work if the auctioneer own the game(use the current auctioneer)',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => "object",
+                                "properties" => [
+                                    "estimation" => [
+                                        "type" => "number",
+                                    ]
+                                ]
+                            ],
                         ]
                     ]
                 ]
@@ -64,15 +102,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'path' => 'admin/auctioneers',
             'denormalization_context' => ['groups' => ['create:Auctionner']],
             'openapi_context' => [
-                'summary' => 'allow to activate or desactivate an auctioneer',
                 'tags' => ["Admin/Auctioneer"],
-                'requestBody' => [
-                    'content' => [
-                        'application/json' => [
-                            'schema' => [],
-                        ]
-                    ]
-                ]
+
             ]
         ],
 

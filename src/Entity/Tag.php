@@ -63,7 +63,7 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Tags'])]
+    #[Groups(['read:Sale', 'read:Tags', 'read:Bid'])]
     private $name;
 
     /**

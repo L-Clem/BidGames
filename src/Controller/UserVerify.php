@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 
-class UserToggleActivationController
+class UserVerify
 {
     public function __invoke(User $data): User
     {
-        $toggle = $data->getDesactivated();
+        $toggle = $data->getVerified();
         $toggle = !$toggle;
-        $data->setDesactivated($toggle);
+        $data->setVerified($toggle);
         return $data;
     }
 }

@@ -41,6 +41,7 @@ class AuctioneerDataPersister implements ContextAwareDataPersisterInterface
 
     public function persist($data, array $context = [])
     {
+
         if ($data->getPlainPassword()) {
             $data->setPassword(
                 $this->_passwordHasher->hashPassword($data, $data->getPlainPassword())
@@ -48,7 +49,9 @@ class AuctioneerDataPersister implements ContextAwareDataPersisterInterface
 
             $data->eraseCredentials();
         }
+
         $data->setRoles(["ROLE_AUCTIONEER"]);
+
 
 
         $this->_entityManager->persist($data);

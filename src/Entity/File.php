@@ -14,6 +14,15 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass=FileRepository::class)
  * @Vich\Uploadable
  */
+#[ApiResource(
+    itemOperations: [
+        'delete' => [
+            "security" => "is_granted('ROLE_USER')",
+        ],
+    ],
+    collectionOperations: [],
+
+)]
 class File
 {
     /**
