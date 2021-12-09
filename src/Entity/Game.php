@@ -32,15 +32,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     collectionOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:Games']]
+            'normalization_context' => ['groups' => ['read:Sales']]
         ],
         'post' => [
-            'denormalization_context' => ['groups' => ['create:Game']]
+            'denormalization_context' => ['groups' => ['create:Sale']],
+            'security' => 'is_granted("ROLE_AUCTIONEER") or is_granted("ROLE_USER)',
         ],
         'addImage' => [
             'method' => 'POST',
             'controller' => PostImageController::class,
-            'path' => '/games/{id}/image',
+            'path' => '/sales/{id}/image',
             'deserialize' => false,
             'openapi_context' => [
                 'requestBody' => [
@@ -59,10 +60,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     ],
                 ],
             ],
-
         ],
     ],
-
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id' => 'ASC', 'estimation' => 'ASC', 'forSale' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'estimation' => 'exact'])]
