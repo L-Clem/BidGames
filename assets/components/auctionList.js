@@ -69,7 +69,7 @@ export default class AuctionList extends Component {
                     {items.slice(1, 5).map(item => (
                         <div className="list-element" key={item.id}>
                             <Card border="light" className="custom-card">
-                                <Card.Img variant="top" src={require('../images/splash.png')}  />
+                                <Card.Img variant="top" src={require('../images/poker3.jpg')}  />
                                 <Card.Body>
                                     <Link to={`/items/${item.id}`}>{item.title}</Link>
                                     <Card.Text className="price">20 $</Card.Text>

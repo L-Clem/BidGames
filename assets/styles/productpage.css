@@ -31,7 +31,6 @@
     font-weight: bold;
 }
 
-
 .seller-info {
     border: 1px solid #868d8f7e;
     border-radius: 3px;
@@ -48,6 +47,10 @@
 .make-bid {
     display: flex;
     align-items: center;
+}
+
+.bid-input {
+    max-width: 300px;
 }
 
 Button.favorites {
