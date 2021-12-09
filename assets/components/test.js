@@ -40,22 +40,22 @@ export default class Testcomp extends Component {
         
     } 
 
-    render() {
-        const { error, isLoaded, items } = this.state;
-        if (error) {
-          return <div>Error: {error.message}</div>;
-        } else if (!isLoaded) {
-          return <div>Loading...</div>;
-        } else {
-          return (
-              <ul>
-              {items.map(item => (
-                <li key={item.id}>
-                  {item.name}
-                </li>
-              ))}
-            </ul>
-          );
-        }
-      }
+    // render() {
+    //     const { error, isLoaded, items } = this.state;
+    //     if (error) {
+    //       return <div>Error: {error.message}</div>;
+    //     } else if (!isLoaded) {
+    //       return <div>Loading...</div>;
+    //     } else {
+    //       return (
+    //           <ul>
+    //           {items.map(item => (
+    //             <li key={item.id}>
+    //               {item.name}
+    //             </li>
+    //           ))}
+    //         </ul>
+    //       );
+    //     }
+    //   }
 }

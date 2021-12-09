@@ -73,7 +73,7 @@ class Game
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Game', 'read:DepositAdress', 'read:Sale'])]
+    #[Groups(['read:Game', 'read:DepositAdress', 'read:Sale', 'read:product_page'])]
     private $id;
 
     /**
@@ -126,7 +126,7 @@ class Game
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:DepositAdress', 'read:Sale'])]
+    #[Groups(['read:Sale', 'read:Games', 'create:Game', 'read:DepositAdress', 'read:Sale', 'read:product_page'])]
     private $title;
 
     /**

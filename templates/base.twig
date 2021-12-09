@@ -22,9 +22,9 @@
         <div class="body-container">
             <header>
                 {% block header %}
-                    <nav>
+                    <nav class="header-nav">
                         <div>
-                            <span id="logo">BIDGAMES</span>
+                            <a id="logo" href={{ path("app") }}>BIDGAMES</a>
                         </div>
                         {% block nav %}
                             <div class="nav-links">

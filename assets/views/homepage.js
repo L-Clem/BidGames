@@ -1,4 +1,3 @@
-import '../styles/app.css';
 import '../styles/homepage.css';
 
 import React, { Component, useEffect, useState } from "react";

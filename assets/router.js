@@ -7,10 +7,8 @@ export default function AppRouter() {
     return (
         <Router>
             <Routes>
-                <Route exact path="/app" element={<Homepage />}/>
-                    <Route exact path="items" element={<Homepage />}> 
-                        <Route path=":itemId" element={<ProductPage />} />
-                    </Route>
+                <Route exact path="/" element={<Homepage />}/>
+                    <Route exact path="items/:itemId" element={<ProductPage />} /> 
             </Routes>
         </Router>
     );
