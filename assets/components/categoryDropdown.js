@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
 
-export default class Testcomp extends Component {
+export default class CategoryDropdown extends Component {
     constructor(props) {
         super(props);
         this.state = {

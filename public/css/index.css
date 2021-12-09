@@ -12,11 +12,13 @@ body {
 /* navbar */
 
 #logo {
+    text-decoration: none;
     font-family: 'Alfa Slab One';
     font-size: 36px;
+    color: black;
 }
 
-nav {
+.header-nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

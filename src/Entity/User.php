@@ -111,8 +111,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'lastname' => 'partial'])]
 class User extends Individual
 {
-
-
     /**
      * @ORM\Column(type="date")
      * @Groups({"person:read", "person:write"})
