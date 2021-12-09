@@ -78,7 +78,7 @@ function ProductPage() {
                                 <p>Starting bid: <span className="product-price">€35,00 </span></p>
                                 <div>
                                     <Form class="make-bid" action="">
-                                        <Form.Control type="text" placeholder="Bid amount" />
+                                        <Form.Control className="bid-input" type="text" placeholder="Bid amount" />
                                         <Button className="bid" variant="success">Place bid</Button>
                                     </Form>
                                 </div>

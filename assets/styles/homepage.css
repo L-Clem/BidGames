@@ -26,7 +26,7 @@ h2 {
     margin: 5px;
     padding: 0;
     width: 25%;
-    min-height: 300px;
+    max-height: 400px;
 }
 
 .card-body {
@@ -43,6 +43,7 @@ h2 {
 
 .auction-section {
     margin-bottom: 20px;
+    display: block;
 }
 
 .colored-card {
@@ -72,7 +73,7 @@ h2 {
 }
 
 .custom-card {
-    max-height: 300px;
+    max-height: 400px;
     height: 100%;
     /* margin: 10px; */
 }
