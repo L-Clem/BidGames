@@ -2,17 +2,18 @@
 
 namespace App\Entity;
 
+use App\Entity\Game;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SaleRepository;
+use App\Controller\SaleCountFavorites;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use App\Controller\SaleCountFavorites;
-use App\Repository\SaleRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SaleRepository::class)
@@ -23,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true,
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['read:Sale', 'read:Sales']]
+            'normalization_context' => ['groups' => ['read:product_page']]
         ],
         'patch' => [
             'denormalization_context' => ['groups' => ['update:Sale', 'create:Sale']],
@@ -104,19 +105,19 @@ class Sale
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:Sales', 'read:Bid'])]
+    #[Groups(['read:Sales', 'read:Bid', 'read:product_page'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sales', 'create:Sale', 'read:Bid'])]
+    #[Groups(['read:Sales', 'create:Sale', 'read:Bid', 'read:product_page'])]
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:Sale', 'create:Sale', 'read:Bid'])]
+    #[Groups(['read:Sale', 'create:Sale', 'read:Bid', 'read:product_page'])]
     private $description;
 
     /**
@@ -128,7 +129,7 @@ class Sale
     /**
      * @ORM\Column(type="datetime")
      */
-    #[Groups(['read:Sale'])]
+    #[Groups(['read:Sale', 'read:product_page'])]
     private $publishedAt;
 
     /**
@@ -140,7 +141,7 @@ class Sale
     /**
      * @ORM\ManyToMany(targetEntity=Game::class, inversedBy="sales")
      */
-    #[Groups(['read:Sale', 'create:Sale'])]
+    #[Groups(['read:Sale', 'create:Sale', 'read:product_page'])]
     private $game;
 
     /**
@@ -152,7 +153,7 @@ class Sale
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['read:Sale', 'read:Bid'])]
+    #[Groups(['read:Sale', 'read:Bid', 'read:product_page'])]
     private $picture;
 
     /**

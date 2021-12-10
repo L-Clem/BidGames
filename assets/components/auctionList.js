@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 export default class AuctionList extends Component {
     constructor(props) {
         super(props);
@@ -69,9 +69,9 @@ export default class AuctionList extends Component {
                     {items.slice(1, 5).map(item => (
                         <div className="list-element" key={item.id}>
                             <Card border="light" className="custom-card">
-                                <Card.Img variant="top" src={require('../images/splash.png')}  />
+                                <Card.Img variant="top" src={require('../images/poker3.jpg')}  />
                                 <Card.Body>
-                                    <Card.Link href={`/item/${item.id}`}>{item.title}</Card.Link>
+                                    <Link to={`/items/${item.id}`}>{item.title}</Link>
                                     <Card.Text className="price">20 $</Card.Text>
                                     <Card.Text>Bids: 8</Card.Text>
                                 </Card.Body>
