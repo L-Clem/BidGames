@@ -38,7 +38,7 @@ Here's our E/R diagram (made with [dbdiagram.io](https://dbdiagram.io/home)) :
 
 
 ## Run Locally
-❗ You can't run this project without the keys needed for authentification.
+*❗ You can't run this project without the keys needed for authentification*
 
 Clone the project
 
